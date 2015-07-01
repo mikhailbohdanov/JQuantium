@@ -17,6 +17,10 @@ public class Pages {
     @RequestMapping(value = "/**", method = RequestMethod.GET)
     public String getPage(HttpServletRequest request, HttpServletResponse response, Model model) {
 
+
+
+
+
         return "";
     }
 
