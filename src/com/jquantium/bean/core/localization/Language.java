@@ -1,9 +1,9 @@
 package com.jquantium.bean.core.localization;
 
-import com.jquantium.bean.core.dao.Column;
+import com.jquantium.dao.annotation.Column;
 import com.jquantium.bean.core.dao.Entity;
 import com.jquantium.bean.core.dao.Id;
-import com.jquantium.bean.core.dao.Table;
+import com.jquantium.dao.annotation.Table;
 
 
 /**
