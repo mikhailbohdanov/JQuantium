@@ -103,66 +103,43 @@ public final class Url {
         } catch (MalformedURLException e) {}
 
         if (url != null) {
-            if ((tmp = url.getProtocol()) != null) {
-                context.protocol    = tmp;
-            }
+            context.setProtocol(url.getProtocol());
 
             if ((tmp = url.getUserInfo()) != null) {
                 vars    = tmp.split(":");
 
                 if (vars.length > 1) {
-                    context.userName    = vars[0];
-                    context.password    = vars[1];
+                    context.setUserName(vars[0]);
+                    context.setPassword(vars[1]);
                 } else {
-                    context.userName    = vars[0];
+                    context.setUserName(vars[0]);
                 }
             }
 
-            if ((tmp = url.getHost()) != null) {
-                context.host    = tmp;
-            }
+            context.setHost(url.getHost());
 
-            if ((index = url.getPort()) > 0) {
-                context.port    = index;
-            }
+            context.setPort(url.getPort());
 
-            if ((tmp = url.getPath()) != null) {
-                context.path    = tmp;
-            }
+            context.setPath(url.getPath());
 
-            if ((tmp = url.getQuery()) != null) {
-                context.setSearch(tmp);
-            }
+            context.setSearch(url.getQuery());
 
-            if ((tmp = url.getRef()) != null) {
-                context.hash    = tmp;
-            }
+            context.setHash(url.getRef());
         }
 
         return context;
     }
 
-    //TODO
-//    public Url copy() {
-//        Url url = new Url();
-//
-//        url.protocol    = this.protocol;
-//        url.userName    = this.userName;
-//        url.password    = this.password;
-//        url.host        = this.host;
-//        url.port        = this.port;
-//        url.path        = this.path;
-//        url.copySearch(this.search);
-//        url.hash        = this.hash;
-//
-//        return url;
-//    }
-
     public String getProtocol() {
         return protocol;
     }
     public Url setProtocol(String protocol) {
-        this.protocol = protocol;
+        if (protocol == null || protocol.isEmpty()) {
+            this.protocol = null;
+        } else {
+            this.protocol = protocol;
+        }
+
         return this;
     }
 
@@ -170,7 +147,12 @@ public final class Url {
         return userName;
     }
     public Url setUserName(String userName) {
-        this.userName = userName;
+        if (userName == null || userName.isEmpty()) {
+            this.userName = null;
+        } else {
+            this.userName = userName;
+        }
+
         return this;
     }
 
@@ -178,7 +160,12 @@ public final class Url {
         return password;
     }
     public Url setPassword(String password) {
-        this.password = password;
+        if (password == null || password.isEmpty()) {
+            this.password = null;
+        } else {
+            this.password = password;
+        }
+
         return this;
     }
 
@@ -186,7 +173,12 @@ public final class Url {
         return host;
     }
     public Url setHost(String host) {
-        this.host = host;
+        if (host == null || host.isEmpty()) {
+            this.host = null;
+        } else {
+            this.host = host;
+        }
+
         return this;
     }
 
@@ -195,6 +187,7 @@ public final class Url {
     }
     public Url setPort(int port) {
         this.port = port;
+
         return this;
     }
 
@@ -202,7 +195,12 @@ public final class Url {
         return path;
     }
     public Url setPath(String path) {
-        this.path = path;
+        if (path == null || path.isEmpty()) {
+            this.path = null;
+        } else {
+            this.path = path;
+        }
+
         return this;
     }
 
@@ -333,15 +331,6 @@ public final class Url {
         return this;
     }
 
-//    public Url copySearch(Map<String, ArrayList<String>> search) {
-//        this.search = new HashMap<String, ArrayList<String>>();
-//
-//        for (Map.Entry<String, ArrayList<String>> entry : search.entrySet())
-//            this.search.put(entry.getKey(), new ArrayList<String>(entry.getValue()));
-//
-//        return this;
-//    }
-
     public Url deleteSearch(String searchKey) {
         if (search != null) {
             search.remove(searchKey);
@@ -387,7 +376,12 @@ public final class Url {
         return hash;
     }
     public Url setHash(String hash) {
-        this.hash = hash;
+        if (hash == null || hash.isEmpty()) {
+            this.hash = null;
+        } else {
+            this.hash = hash;
+        }
+
         return this;
     }
 

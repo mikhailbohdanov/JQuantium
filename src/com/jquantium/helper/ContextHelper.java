@@ -1,5 +1,6 @@
 package com.jquantium.helper;
 
+import com.jquantium.bean.Url;
 import com.jquantium.bean.core.Context;
 import com.jquantium.bean.view.PageContext;
 import org.springframework.ui.Model;
@@ -13,17 +14,30 @@ import javax.servlet.http.HttpServletResponse;
 public class ContextHelper {
 
     public static Context getContext(HttpServletRequest request, HttpServletResponse response) {
-        return new Context();
+        return new Context(request, response);
     }
 
-    public static PageContext getPageContext(HttpServletRequest request) {
-        return getPageContext(request, null, null);
+
+    public static PageContext newPageContext(HttpServletRequest request, Model model) {
+        return newPageContext(request, null, model, null);
     }
-    public static PageContext getPageContext(HttpServletRequest request, HttpServletResponse response) {
-        return getPageContext(request, response, null);
+    public static PageContext newPageContext(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return newPageContext(request, response, model, null);
     }
-    public static PageContext getPageContext(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return new PageContext();
+    public static PageContext newPageContext(HttpServletRequest request, Model model, Url url) {
+        return newPageContext(request, null, model, url);
+    }
+    public static PageContext newPageContext(HttpServletRequest request, HttpServletResponse response, Model model, Url url) {
+        PageContext PC  = new PageContext(request, response, model);
+
+//        PC.setLanguage();
+
+//        if (url == null)
+//            PC.setUrl(new Url(request));
+//        else
+//            PC.setUrl(url);
+
+        return PC;
     }
 
 

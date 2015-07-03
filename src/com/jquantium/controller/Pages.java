@@ -1,5 +1,6 @@
 package com.jquantium.controller;
 
+import com.jquantium.bean.Url;
 import com.jquantium.bean.view.PageContext;
 import com.jquantium.helper.ContextHelper;
 import org.springframework.stereotype.Controller;
@@ -18,10 +19,10 @@ public class Pages {
 
     @RequestMapping(value = "/**", method = RequestMethod.GET)
     public String getPage(HttpServletRequest request, HttpServletResponse response, Model model) {
-        PageContext PC = ContextHelper.getPageContext(request, response, model);
+        PageContext PC = ContextHelper.newPageContext(request, response, model);
 
-
-
+        Url url             = PC.getUrl();
+        String currentUrl   = url.getPath();
 
 
         return PC.render();
