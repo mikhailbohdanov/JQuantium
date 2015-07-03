@@ -1,26 +1,25 @@
-package com.jquantium.bean.core.localization;
+package com.jquantium.bean.localization;
 
 import com.jquantium.dao.annotation.Column;
-import com.jquantium.bean.core.dao.Entity;
-import com.jquantium.bean.core.dao.Id;
 import com.jquantium.dao.annotation.Table;
 
 
 /**
  * Created by Mykhailo_Bohdanov on 26/06/2015.
  */
-@Entity
 @Table(name = "core_languages")
 public class Language {
 
-    @Id
     @Column
     private int languageId;
 
+    @Column
     private String code;
 
+    @Column
     private String name;
 
+    @Column
     private boolean enable;
 
     public Language(int languageId, String code, String name, boolean enable) {

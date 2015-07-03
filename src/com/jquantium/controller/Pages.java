@@ -1,5 +1,7 @@
 package com.jquantium.controller;
 
+import com.jquantium.bean.view.PageContext;
+import com.jquantium.helper.ContextHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +18,13 @@ public class Pages {
 
     @RequestMapping(value = "/**", method = RequestMethod.GET)
     public String getPage(HttpServletRequest request, HttpServletResponse response, Model model) {
+        PageContext PC = ContextHelper.getPageContext(request, response, model);
 
 
 
 
 
-        return "";
+        return PC.render();
     }
 
 }

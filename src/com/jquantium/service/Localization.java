@@ -1,6 +1,6 @@
 package com.jquantium.service;
 
-import com.jquantium.bean.core.localization.Language;
+import com.jquantium.bean.localization.Language;
 
 /**
  * Created by Mykhailo_Bohdanov on 26/06/2015.

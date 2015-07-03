@@ -1,15 +1,18 @@
-package com.jquantium.util;
+package com.jquantium.helper;
 
+import com.jquantium.dao.annotation.Column;
 import com.jquantium.dao.annotation.Table;
+import com.jquantium.dao.instance.ColumnInstance;
 import com.jquantium.dao.instance.TableInstance;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 
 /**
  * Created by Mykhailo_Bohdanov on 02/07/2015.
  */
-public class DAOParser {
+public class DAOHelper {
     private static HashMap<Class, TableInstance> instances = new HashMap<>();
 
     private static void prepareClass(Class tClass) {
@@ -19,14 +22,29 @@ public class DAOParser {
             return;
         }
 
-        Table tableInfo = (Table) annotation;
+        TableInstance tableInstance = TableInstance.createInstance((Table) annotation, tClass);
 
-        TableInstance tableInstance = new TableInstance(tableInfo);
+        if (tableInstance == null) {
+            return;
+        }
 
+        ColumnInstance columnInstance;
 
+        for (Field tField : tClass.getDeclaredFields()) {
+            annotation = tField.getAnnotation(Column.class);
 
+            if (annotation == null) {
+                continue;
+            }
 
+            columnInstance = ColumnInstance.createInstance((Column) annotation, tField);
 
+            if (columnInstance == null) {
+                continue;
+            }
+
+            tableInstance.addColumn(columnInstance);
+        }
 
         instances.put(tClass, tableInstance);
     }
