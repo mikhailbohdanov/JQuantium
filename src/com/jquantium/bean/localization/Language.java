@@ -10,13 +10,13 @@ import com.jquantium.dao.annotation.Table;
 @Table(name = "core_languages")
 public class Language {
 
-    @Column
+    @Column(primary = true, length = 10, autoIncrement = true, unsigned = true)
     private int languageId;
 
-    @Column
+    @Column(unique = "code", length = 5)
     private String code;
 
-    @Column
+    @Column(notNull = true)
     private String name;
 
     @Column

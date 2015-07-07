@@ -21,11 +21,11 @@ public class ContextHelper {
     public static PageContext newPageContext(HttpServletRequest request, Model model) {
         return newPageContext(request, null, model, null);
     }
-    public static PageContext newPageContext(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return newPageContext(request, response, model, null);
-    }
     public static PageContext newPageContext(HttpServletRequest request, Model model, Url url) {
         return newPageContext(request, null, model, url);
+    }
+    public static PageContext newPageContext(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return newPageContext(request, response, model, null);
     }
     public static PageContext newPageContext(HttpServletRequest request, HttpServletResponse response, Model model, Url url) {
         PageContext PC  = new PageContext(request, response, model);

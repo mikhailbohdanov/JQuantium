@@ -11,4 +11,17 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Column {
+
+    String name() default "";
+
+    boolean primary() default false;
+    String unique() default "";
+
+    int length() default 255;
+    boolean unsigned() default false;
+    boolean autoIncrement() default false;
+
+    boolean notNull() default false;
+    String defaultValue() default "";
+
 }

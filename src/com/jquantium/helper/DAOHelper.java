@@ -22,7 +22,7 @@ public class DAOHelper {
             return;
         }
 
-        TableInstance tableInstance = TableInstance.createInstance((Table) annotation, tClass);
+        TableInstance tableInstance = new TableInstance((Table) annotation, tClass);
 
         if (tableInstance == null) {
             return;
@@ -37,7 +37,7 @@ public class DAOHelper {
                 continue;
             }
 
-            columnInstance = ColumnInstance.createInstance((Column) annotation, tField);
+            columnInstance = new ColumnInstance((Column) annotation, tField);
 
             if (columnInstance == null) {
                 continue;
