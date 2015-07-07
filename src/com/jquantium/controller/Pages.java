@@ -1,8 +1,11 @@
 package com.jquantium.controller;
 
 import com.jquantium.bean.Url;
+import com.jquantium.bean.core.Route;
 import com.jquantium.bean.view.PageContext;
+import com.jquantium.bean.view.page.Page;
 import com.jquantium.helper.ContextHelper;
+import com.jquantium.util.error.PageNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,14 @@ public class Pages {
 
         Url url             = PC.getUrl();
         String currentUrl   = url.getPath();
+        Page page           = null;
+        Route route         = null;
+
+        try {
+
+        } catch (PageNotFoundException e) {}
+
+        
 
 
         return PC.render();
