@@ -5,6 +5,7 @@ import com.jquantium.bean.core.Route;
 import com.jquantium.bean.view.PageContext;
 import com.jquantium.bean.view.page.Page;
 import com.jquantium.helper.ContextHelper;
+import com.jquantium.service.Router;
 import com.jquantium.service.View;
 import com.jquantium.util.error.PageNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -35,9 +36,30 @@ public class Pages {
         } catch (PageNotFoundException e) {}
 
         if (page == null) {
+            try {
+                route       = Router.findRoute(currentUrl);
+                page        = View.getPage(route.getOwnerId());
+            } catch (PageNotFoundException e) {}
+        }
 
+        if (page == null) {
+            try {
+                route       = Router.getRoute(currentUrl.replaceAll("^/", ""));
 
-            //TODO here get element by route url
+                if (route != null) {
+                    switch (route.getType()) {
+                        case PAGE:
+
+                            break;
+                        case USER:
+
+                            break;
+                        case GROUP:
+
+                            break;
+                    }
+                }
+            } catch (PageNotFoundException e) {}
         }
 
         if (page != null) {

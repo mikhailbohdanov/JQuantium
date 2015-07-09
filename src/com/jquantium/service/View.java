@@ -22,6 +22,11 @@ public class View {
 
         return null;
     }
+    public static Page getPage(int pageId) throws PageNotFoundException {
+
+
+        return null;
+    }
 
     @Autowired
     public void init() {
