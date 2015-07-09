@@ -1,4 +1,4 @@
-package com.jquantium.bean.core;
+package com.jquantium.util;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
