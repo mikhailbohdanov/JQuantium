@@ -2,6 +2,7 @@ package com.jquantium.controller;
 
 import com.jquantium.bean.Url;
 import com.jquantium.bean.view.PageContext;
+import com.jquantium.bean.view.page.Page;
 import com.jquantium.helper.ContextHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,17 @@ public class Pages {
 
         Url url             = PC.getUrl();
         String currentUrl   = url.getPath();
+        Page page           = null;
 
+        //TODO here get page from View storage by url pattern
+
+        if (page == null) {
+            //TODO find in routes page
+        }
+
+        if (page == null) {
+            //TODO
+        }
 
         return PC.render();
     }
