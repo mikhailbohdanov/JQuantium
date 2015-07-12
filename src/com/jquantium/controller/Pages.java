@@ -42,25 +42,26 @@ public class Pages {
             } catch (PageNotFoundException e) {}
         }
 
-        if (page == null) {
-            try {
-                route       = Router.getRoute(currentUrl.replaceAll("^/", ""));
-
-                if (route != null) {
-                    switch (route.getType()) {
-                        case PAGE:
-
-                            break;
-                        case USER:
-
-                            break;
-                        case GROUP:
-
-                            break;
-                    }
-                }
-            } catch (PageNotFoundException e) {}
-        }
+        //TODO maybe realize in other method
+//        if (page == null) {
+//            try {
+//                route       = Router.getRoute(currentUrl.replaceAll("^/", ""));
+//
+//                if (route != null) {
+//                    switch (route.getType()) {
+//                        case PAGE:
+//
+//                            break;
+//                        case USER:
+//
+//                            break;
+//                        case GROUP:
+//
+//                            break;
+//                    }
+//                }
+//            } catch (PageNotFoundException e) {}
+//        }
 
         if (page != null) {
             //TODO here build page by Page
