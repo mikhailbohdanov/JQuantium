@@ -1,7 +1,6 @@
 package com.jquantium.util.auto;
 
 import com.jquantium.dao.DAO;
-import com.jquantium.helper.DAOHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.ParameterizedType;
