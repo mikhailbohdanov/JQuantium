@@ -2,6 +2,7 @@ package com.jquantium.bean.localization;
 
 import com.jquantium.dao.annotation.Column;
 import com.jquantium.dao.annotation.Table;
+import com.jquantium.util.auto.annotation.Setter;
 
 
 /**
@@ -41,6 +42,7 @@ public class Language {
         return name;
     }
 
+    @Setter
     public void setName(String name) {
         this.name = name;
     }
@@ -49,6 +51,7 @@ public class Language {
         return enable;
     }
 
+    @Setter
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
