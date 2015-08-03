@@ -1,5 +1,6 @@
 package com.jquantium.dao;
 
+import com.jquantium.dao.instance.TableInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,6 +19,56 @@ import java.util.List;
  */
 @Repository
 public class DAO {
+
+    @Autowired
+    private NamedParameterJdbcTemplate source;
+
+    // - Tables
+    public void createTable(Class eClass) {
+        TableInstance tableInstance =
+    }
+
+    public void createTable(TableInstance tableInstance) {
+
+    }
+    public void alterTable(TableInstance tableInstance) {
+
+    }
+    public void dropTable(TableInstance tableInstance) {
+
+    }
+
+    // - Rows
+    public <E> int[] insertRows(List<E> elements) {
+        return null;
+    }
+    public <E> int[] insertRows(E[] elements) {
+        return null;
+    }
+    public <E> int insertRow(E element) {
+        return 0;
+    }
+
+
+    public void insertRow() {
+
+    }
+    public void getRow() {
+
+    }
+    public void updateRow() {
+
+    }
+    public void removeRow() {
+
+    }
+
+
+
+
+
+
+
     private HashMap<Integer, NamedParameterJdbcTemplate> dataSources   = new HashMap<Integer, NamedParameterJdbcTemplate>();
 
     @Autowired

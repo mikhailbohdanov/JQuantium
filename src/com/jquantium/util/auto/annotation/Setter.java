@@ -6,9 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by Mykhailo_Bohdanov on 28/07/2015.
+ * Created by Mykhailo_Bohdanov on 01/07/2015.
  */
-@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
 public @interface Setter {
+
 }

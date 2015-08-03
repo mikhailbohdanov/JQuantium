@@ -2,7 +2,6 @@ package com.jquantium.util.auto;
 
 import com.jquantium.bean.localization.Language;
 import com.jquantium.dao.DAO;
-import com.jquantium.helper.DAOHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,10 +15,10 @@ import java.util.Collection;
 public class AutoList<E> extends ArrayList<E> {
     private Class<E> eClass;
 
-    @Autowired
     private DAO dao;
 
-    public AutoList() {
+    @Autowired
+    public AutoList(DAO dao) {
         eClass          = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
     }
