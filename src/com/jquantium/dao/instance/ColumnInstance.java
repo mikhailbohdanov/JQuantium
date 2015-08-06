@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
  */
 public class ColumnInstance {
     private Field tField;
+    private TableInstance tableInstance;
 
     private String name;
 
@@ -25,7 +26,10 @@ public class ColumnInstance {
     public ColumnInstance(Column columnInfo, Field tField) {
         this.tField         = tField;
 
-        this.name           = columnInfo.name();
+        if ((this.name = columnInfo.name()) == null || this.name.isEmpty()) {
+            this.name       = tField.getName();
+        }
+
         this.primary        = columnInfo.primary();
         this.unique         = columnInfo.unique();
         this.length         = columnInfo.length();
@@ -33,6 +37,14 @@ public class ColumnInstance {
         this.notNull        = columnInfo.notNull();
         this.unsigned       = columnInfo.unsigned();
         this.autoIncrement  = columnInfo.autoIncrement();
+    }
+
+    public TableInstance getTable() {
+        return tableInstance;
+    }
+
+    public void setTable(TableInstance tableInstance) {
+        this.tableInstance = tableInstance;
     }
 
     public String getName() {
