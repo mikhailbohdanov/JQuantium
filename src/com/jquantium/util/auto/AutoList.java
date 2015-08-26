@@ -20,6 +20,17 @@ public class AutoList<E extends Broadcaster> extends ArrayList<E> implements Dis
 
     private DAONew dao;
 
+    private void addElement() {
+
+    }
+    private void updateElement() {
+
+    }
+    private void removeElement() {
+
+    }
+
+
     public AutoList() {
         super();
 
@@ -32,6 +43,30 @@ public class AutoList<E extends Broadcaster> extends ArrayList<E> implements Dis
         super(elements);
 
     }
+
+    @Override
+    public boolean add(E e) {
+
+
+        return super.add(e);
+    }
+
+    @Override
+    public void add(int index, E element) {
+        super.add(index, element);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return super.addAll(c);
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends E> c) {
+        return super.addAll(index, c);
+    }
+
+
 
     @Override
     public void listen(Event<AutoList, E> event) {

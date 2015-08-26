@@ -2,8 +2,10 @@ package com.jquantium.bean.localization;
 
 import com.jquantium.dao.annotation.Column;
 import com.jquantium.dao.annotation.Table;
-import com.jquantium.util.auto.annotation.Setter;
 import com.jquantium.util.event.Broadcaster;
+import com.jquantium.util.event.handlers.Setter;
+
+import javax.interceptor.Interceptors;
 
 
 /**
@@ -43,7 +45,7 @@ public class Language implements Broadcaster {
         return name;
     }
 
-    @Setter
+    @Interceptors(Setter.class)
     public void setName(String name) {
         this.name = name;
     }
@@ -52,7 +54,7 @@ public class Language implements Broadcaster {
         return enable;
     }
 
-    @Setter
+    @Interceptors(Setter.class)
     public void setEnable(boolean enable) {
         this.enable = enable;
     }
