@@ -1,6 +1,7 @@
 package com.jquantium.dao;
 
 import com.jquantium.dao.instance.TableInstance;
+import com.jquantium.dao.queries.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.RowMapper;
@@ -156,8 +157,6 @@ public class DAO {
             throw e;
         }
     }
-
-
 
 
 

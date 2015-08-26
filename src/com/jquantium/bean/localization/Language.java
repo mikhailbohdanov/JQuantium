@@ -3,13 +3,14 @@ package com.jquantium.bean.localization;
 import com.jquantium.dao.annotation.Column;
 import com.jquantium.dao.annotation.Table;
 import com.jquantium.util.auto.annotation.Setter;
+import com.jquantium.util.event.Broadcaster;
 
 
 /**
  * Created by Mykhailo_Bohdanov on 26/06/2015.
  */
 @Table(name = "core_languages")
-public class Language {
+public class Language implements Broadcaster {
 
     @Column(primary = true, length = 10, autoIncrement = true, unsigned = true)
     private int languageId;

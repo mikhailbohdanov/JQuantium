@@ -32,6 +32,9 @@ public class TableInstance<E> {
         columnsByName.put(columnInstance.getName(), columnInstance);
     }
 
+    public List<ColumnInstance> getColumns() {
+        return columns;
+    }
     public ColumnInstance getColumn(String columnName) {
         return columnsByName.get(columnName);
     }

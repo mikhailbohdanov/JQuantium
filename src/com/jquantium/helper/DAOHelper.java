@@ -4,10 +4,12 @@ import com.jquantium.dao.annotation.Column;
 import com.jquantium.dao.annotation.Table;
 import com.jquantium.dao.instance.ColumnInstance;
 import com.jquantium.dao.instance.TableInstance;
+import com.jquantium.dao.queries.Select;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Mykhailo_Bohdanov on 02/07/2015.
@@ -68,5 +70,12 @@ public class DAOHelper {
         return instances.get(tClass);
     }
 
+    public static <E> Select<E> getAll(Class<E> eClass) {
+        Select<E> select = new Select();
+
+
+
+        return select;
+    }
 
 }

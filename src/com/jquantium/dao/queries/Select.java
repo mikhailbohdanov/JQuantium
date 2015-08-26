@@ -1,5 +1,6 @@
 package com.jquantium.dao.queries;
 
+import com.jquantium.dao.instance.ColumnInstance;
 import com.jquantium.dao.instance.TableInstance;
 import com.jquantium.dao.queries.parts.*;
 import com.jquantium.helper.DAOHelper;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by Mykhailo_Bohdanov on 03/08/2015.
  */
-public class Select {
+public class Select<E> {
     private List<Selection> selections  = new ArrayList<>();
 
     private TableInstance tableFrom;
@@ -79,41 +80,49 @@ public class Select {
     }
 
     public String fetch() {
+        String tmp;
+        ColumnInstance columnInstance;
+
         StringBuilder query = new StringBuilder();
 
-        query.append("SELECT ");
+        query.append("SELECT");
 
         if (selections != null && selections.size() > 0) {
             for (Selection selection : selections) {
+                columnInstance  = selection.getColumn();
+
                 query
-                        .append("`")
-                        .append(selection
-                                .getColumn()
+                        .append(" `")
+                        .append(columnInstance
                                 .getTable()
                                 .getTableName())
                         .append("`.`")
-                        .append(selection
-                                .getColumn()
+                        .append(columnInstance
                                 .getName())
                         .append("`");
 
-                if (selection.getAlias() != null && !selection.getAlias().isEmpty()) {
+                if ((tmp = selection.getAlias()) != null && !tmp.isEmpty()) {
                     query
                             .append(" AS `")
-                            .append(selection.getAlias())
+                            .append(tmp)
                             .append("`");
                 }
-
-                query.append(" ");
             }
         } else {
-            query.append("* ");
+            query.append(" *");
         }
 
-        query.append("FROM `").append(tableFrom.getTableName()).append("` ");
+        query.append(" FROM `").append(tableFrom.getTableName()).append("`");
 
         if (tableAlias != null && !tableAlias.isEmpty()) {
-            query.append("AS `").append(tableAlias).append("` ");
+            query.append(" AS `").append(tableAlias).append("`");
+        }
+
+        if (limit != null && limit.getCount() > 0) {
+            query
+                    .append(" LIMIT ")
+                    .append(limit.getOffset())
+                    .append(limit.getCount());
         }
 
         return query.toString();
