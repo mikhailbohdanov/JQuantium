@@ -12,13 +12,26 @@ import java.util.HashMap;
 public abstract class AutoHashMap<K, E extends Broadcaster> extends HashMap<K, E> implements GenerateKey<K, E>, Dispatcher<AutoHashMap, E> {
 
     public AutoHashMap(AutoList<E> autoList) {
+        autoList.subscribe(this);
+        this.subscribe(autoList);
+
+
 
     }
 
     @Override
     public void listen(Event<AutoHashMap, E> event) {
+        E before    = event.getBefore();
+        E after     = event.getAfter();
 
+        if (before != null && after != null) {
+            remove(getKey(before));
+            put(getKey(after), after);
+        } else if (before != null && after == null) {
+            remove(getKey(before));
+        } else {
+            put(getKey(after), after);
+        }
     }
-
 
 }

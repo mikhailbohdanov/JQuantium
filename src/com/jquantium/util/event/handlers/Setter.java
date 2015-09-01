@@ -1,5 +1,7 @@
 package com.jquantium.util.event.handlers;
 
+import com.jquantium.util.event.Broadcaster;
+
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 
@@ -11,7 +13,9 @@ public class Setter {
     @AroundInvoke
     public Object broadcast(InvocationContext context) throws Exception {
 
-        context.getTarget();
+        Broadcaster broadcaster = (Broadcaster) context.getTarget();
+        broadcaster.broadcast();
+
 
         return context.proceed();
     }

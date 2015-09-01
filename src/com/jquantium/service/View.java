@@ -14,6 +14,10 @@ public class View {
     private static AutoTreeMap<String, Page> pages = new AutoTreeMap<String, Page>() {
 
 
+        @Override
+        public String getKey(Page element) {
+            return null;
+        }
     };
 
 

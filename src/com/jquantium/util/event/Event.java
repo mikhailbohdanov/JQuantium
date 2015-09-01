@@ -5,19 +5,24 @@ package com.jquantium.util.event;
  */
 public class Event<T, E> {
     private T target;
-    private E eventData;
+    private E before;
+    private E after;
 
-    public Event(T target, E eventData) {
+    public Event(T target, E before, E after) {
         this.target     = target;
-        this.eventData  = eventData;
+        this.before     = before;
+        this.after      = after;
     }
 
     public T getTarget() {
         return target;
     }
 
-    public E getEventData() {
-        return eventData;
+    public E getAfter() {
+        return after;
     }
 
+    public E getBefore() {
+        return before;
+    }
 }

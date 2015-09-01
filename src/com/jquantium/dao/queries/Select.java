@@ -5,6 +5,7 @@ import com.jquantium.dao.instance.TableInstance;
 import com.jquantium.dao.queries.parts.*;
 import com.jquantium.helper.DAOHelper;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 

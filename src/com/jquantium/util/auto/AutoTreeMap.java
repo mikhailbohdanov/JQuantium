@@ -1,12 +1,20 @@
 package com.jquantium.util.auto;
 
+import com.jquantium.util.event.Broadcaster;
+import com.jquantium.util.event.Dispatcher;
+import com.jquantium.util.event.Event;
+
+import java.util.HashMap;
 import java.util.TreeMap;
 
 /**
  * Created by Mykhailo_Bohdanov on 01/07/2015.
  */
-public abstract class AutoTreeMap<K, V> extends TreeMap<K, V> {
+public abstract class AutoTreeMap<K, E extends Broadcaster> extends HashMap<K, E> implements GenerateKey<K, E>, Dispatcher<AutoTreeMap, E> {
 
+    @Override
+    public void listen(Event<AutoTreeMap, E> event) {
 
+    }
 
 }

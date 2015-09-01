@@ -1,28 +1,36 @@
 package com.jquantium.util.event;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 /**
  * Created by Mykhailo_Bohdanov on 04/08/2015.
  */
 public interface Dispatcher<T, E> {
-    List<Dispatcher> subscribers = new ArrayList<>();
+    HashMap<Object, ArrayList<Dispatcher>> subscribers  = new HashMap<>();
 
     default void subscribe(Dispatcher subscriber) {
-        subscribers.add(subscriber);
+        if (!subscribers.containsKey(this)) {
+            subscribers.put(this, new ArrayList<>());
+        }
+
+        subscribers.get(this).add(subscriber);
     }
 
     default void unsubscribe(Dispatcher subscriber) {
-        subscribers.remove(subscriber);
+        if (subscribers.containsKey(this)) {
+            subscribers.get(this).remove(subscriber);
+        }
     }
 
-    default void dispatch(T target, E eventData) {
-        Event<T, E> event = new Event<>(target, eventData);
+    default void dispatch(T target, E before, E after) {
+        if (subscribers.containsKey(this)) {
+            Event<T, E> event = new Event<>(target, before, after);
 
-        for (Dispatcher subscriber : subscribers) {
-            if (subscriber != this) {
-                subscriber.listen(event);
+            for (Dispatcher subscriber : subscribers.get(this)) {
+                if (subscriber != target) {
+                    subscriber.listen(event);
+                }
             }
         }
     }

@@ -70,7 +70,13 @@ public class DAOHelper {
         return instances.get(tClass);
     }
 
+    public static <E> Select<E> getAll(Class<E> eClass) {
+        Select<E> select = new Select<>();
 
+        select.from(eClass);
+
+        return select;
+    }
 
 
 
