@@ -10,27 +10,28 @@ import com.jquantium.util.event.Watcher;
  * Created by Mykhailo_Bohdanov on 31/08/2015.
  */
 public class TestLang {
+    private AutoList<Language> languages = new AutoList<>();
+    private AutoHashMap<Integer, Language> languagesById = new AutoHashMap<Integer, Language>(languages) {
+        @Override
+        public Integer getKey(Language element) {
+            return element.getLanguageId();
+        }
+    };
+    private AutoHashMap<String, Language> languagesByCode = new AutoHashMap<String, Language>(languages) {
+        @Override
+        public String getKey(Language element) {
+            return element.getCode();
+        }
+    };
 
     public static void main(String[] args) {
-        AutoList<Language> languages = new AutoList<>();
-        AutoHashMap<Integer, Language> languagesById = new AutoHashMap<Integer, Language>(languages) {
-            @Override
-            public Integer getKey(Language element) {
-                return element.getLanguageId();
-            }
-        };
-        AutoHashMap<String, Language> languagesByCode = new AutoHashMap<String, Language>(languages) {
-            @Override
-            public String getKey(Language element) {
-                return element.getCode();
-            }
-        };
+        TestLang test = new TestLang();
 
-        languages.add(new Language(1, "ru", "Русский", true));
-        languages.add(new Language(2, "en", "English", true));
+        test.languages.add(new Language(1, "ru", "Русский", true));
+        test.languages.add(new Language(2, "en", "English", true));
 
-        System.out.println(languagesById);
-        System.out.println(languagesByCode);
+        System.out.println(test.languagesById);
+        System.out.println(test.languagesByCode);
 
     }
 

@@ -25,20 +25,20 @@ public class Localization {
         }
     };
 
-    @Autowired
-    private AutoTreeMap<String, Language> languageByCode    = new AutoTreeMap<String, Language>() {
-        @Override
-        public String getKey(Language language) {
-            return language.getCode();
-        }
-    };
+//    @Autowired
+//    private AutoTreeMap<String, Language> languageByCode    = new AutoTreeMap<String, Language>() {
+//        @Override
+//        public String getKey(Language language) {
+//            return language.getCode();
+//        }
+//    };
 
     public Language getLanguage(int languageId) {
         return languageById.get(languageId);
     }
-    public Language getLanguage(String languageCode) {
-        return languageByCode.get(languageCode);
-    }
+//    public Language getLanguage(String languageCode) {
+//        return languageByCode.get(languageCode);
+//    }
 
 
 

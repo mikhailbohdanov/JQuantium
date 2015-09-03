@@ -13,8 +13,17 @@ import java.util.TreeMap;
 public abstract class AutoTreeMap<K, E extends Broadcaster> extends HashMap<K, E> implements GenerateKey<K, E>, Dispatcher<AutoTreeMap, E> {
 
     @Override
-    public void listen(Event<AutoTreeMap, E> event) {
+    public void add(Event<AutoTreeMap, E> event) {
 
     }
 
+    @Override
+    public void replace(Event<AutoTreeMap, E> event) {
+
+    }
+
+    @Override
+    public void remove(Event<AutoTreeMap, E> event) {
+
+    }
 }

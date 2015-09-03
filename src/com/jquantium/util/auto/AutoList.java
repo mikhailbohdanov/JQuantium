@@ -11,20 +11,12 @@ import java.util.Collection;
  * Created by Mykhailo_Bohdanov on 01/07/2015.
  */
 public class AutoList<E extends Broadcaster> extends ArrayList<E> implements Dispatcher<AutoList, E> {
+    private int hashCode = 0;
+
     private Class<E> eClass;
 
     private void init() {
         //TODO bind all elements for watch edit any object and sync with database
-    }
-
-    private void addElement(E element) {
-        dispatch(this, null, element);
-    }
-    private void updateElement(E before, E after) {
-        dispatch(this, before, after);
-    }
-    private void removeElement(E element) {
-        dispatch(this, null, element);
     }
 
     public AutoList() {
@@ -43,24 +35,24 @@ public class AutoList<E extends Broadcaster> extends ArrayList<E> implements Dis
         init();
     }
 
-
-
     @Override
     public boolean add(E element) {
-        addElement(element);
+        dispatch(this, null, element);
+
         return super.add(element);
     }
 
     @Override
     public void add(int index, E element) {
-        addElement(element);
+        dispatch(this, null, element);
+
         super.add(index, element);
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
         for (E element : c) {
-            addElement(element);
+            dispatch(this, null, element);
         }
 
         return super.addAll(c);
@@ -69,7 +61,7 @@ public class AutoList<E extends Broadcaster> extends ArrayList<E> implements Dis
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
         for (E element : c) {
-            addElement(element);
+            dispatch(this, null, element);
         }
 
         return super.addAll(index, c);
@@ -77,29 +69,30 @@ public class AutoList<E extends Broadcaster> extends ArrayList<E> implements Dis
 
     @Override
     public E set(int index, E element) {
-        updateElement(get(index), element);
+        dispatch(this, get(index), element);
 
         return super.set(index, element);
     }
 
     @Override
     public E remove(int index) {
-        removeElement(get(index));
+        E element = super.remove(index);
+        dispatch(this, element, null);
 
-        return super.remove(index);
+        return element;
     }
 
     @Override
     public boolean remove(Object o) {
-        removeElement((E) o);
+        dispatch(this, (E) o, null);
 
         return super.remove(o);
     }
 
     @Override
     protected void removeRange(int fromIndex, int toIndex) {
-        for (int i = fromIndex; i <= toIndex; i++) {
-            removeElement(get(i));
+        for (int i = fromIndex; i < toIndex; i++) {
+            dispatch(this, get(i), null);
         }
 
         super.removeRange(fromIndex, toIndex);
@@ -108,23 +101,30 @@ public class AutoList<E extends Broadcaster> extends ArrayList<E> implements Dis
     @Override
     public boolean removeAll(Collection<?> c) {
         for (Object element : c) {
-            removeElement((E) element);
+            dispatch(this, (E) element, null);
         }
 
         return super.removeAll(c);
     }
 
     @Override
-    public void listen(Event<AutoList, E> event) {
-        E before    = event.getBefore();
-        E after     = event.getAfter();
-
-        if (before != null && after != null) {
-            set(this.indexOf(before), after);
-        } else if (before != null && after == null) {
-            remove(before);
-        } else {
-            add(after);
-        }
+    public void add(Event<AutoList, E> event) {
+        super.add(event.getAfter());
     }
+
+    @Override
+    public void replace(Event<AutoList, E> event) {
+        super.set(indexOf(event.getBefore()), event.getAfter());
+    }
+
+    @Override
+    public void remove(Event<AutoList, E> event) {
+        super.remove(event.getBefore());
+    }
+
+    @Override
+    public int hashCode() {
+        return (hashCode == 0) ? hashCode = super.hashCode() : hashCode;
+    }
+
 }
