@@ -1,11 +1,10 @@
-package com.jquantium.util.auto;
+package com.jquantium.util.collections.auto;
 
 import com.jquantium.util.event.Broadcaster;
 import com.jquantium.util.event.Dispatcher;
 import com.jquantium.util.event.Event;
 
 import java.util.HashMap;
-import java.util.TreeMap;
 
 /**
  * Created by Mykhailo_Bohdanov on 01/07/2015.

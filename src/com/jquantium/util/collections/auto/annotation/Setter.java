@@ -1,4 +1,4 @@
-package com.jquantium.util.auto.annotation;
+package com.jquantium.util.collections.auto.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
