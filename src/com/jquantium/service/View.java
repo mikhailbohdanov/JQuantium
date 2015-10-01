@@ -1,7 +1,6 @@
 package com.jquantium.service;
 
 import com.jquantium.bean.view.page.Page;
-import com.jquantium.util.auto.AutoTreeMap;
 import com.jquantium.util.error.PageNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,18 +10,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class View {
-    private static AutoTreeMap<String, Page> pages = new AutoTreeMap<String, Page>() {
+//    private static AutoTreeMap<String, Page> pages = new AutoTreeMap<String, Page>() {
 
 
-        @Override
-        public String getKey(Page element) {
-            return null;
-        }
-    };
+//        @Override
+//        public String getKey(Page element) {
+//            return null;
+//        }
+//    };
 
 
     public static Page getPage(String url) throws PageNotFoundException {
-        pages.get(url);
+//        pages.get(url);
 
         return null;
     }

@@ -1,10 +1,6 @@
 package com.jquantium.service;
 
 import com.jquantium.bean.localization.Language;
-import com.jquantium.util.auto.AutoHashMap;
-import com.jquantium.util.auto.AutoList;
-import com.jquantium.util.auto.AutoTreeMap;
-import com.jquantium.util.event.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +10,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class Localization {
 
-    @Autowired
-    private AutoList<Language> languageList                 = new AutoList<>();
+//    @Autowired
+//    private AutoList<Language> languageList                 = new AutoList<>();
 
-    @Autowired
-    private AutoHashMap<Integer, Language> languageById     = new AutoHashMap<Integer, Language>(languageList) {
-        @Override
-        public Integer getKey(Language language) {
-            return language.getLanguageId();
-        }
-    };
+//    @Autowired
+//    private AutoHashMap<Integer, Language> languageById     = new AutoHashMap<Integer, Language>(languageList) {
+//        @Override
+//        public Integer getKey(Language language) {
+//            return language.getLanguageId();
+//        }
+//    };
 
 //    @Autowired
 //    private AutoTreeMap<String, Language> languageByCode    = new AutoTreeMap<String, Language>() {
@@ -33,9 +29,9 @@ public class Localization {
 //        }
 //    };
 
-    public Language getLanguage(int languageId) {
-        return languageById.get(languageId);
-    }
+//    public Language getLanguage(int languageId) {
+//        return languageById.get(languageId);
+//    }
 //    public Language getLanguage(String languageCode) {
 //        return languageByCode.get(languageCode);
 //    }
