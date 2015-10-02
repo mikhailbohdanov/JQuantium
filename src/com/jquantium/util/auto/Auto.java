@@ -11,5 +11,4 @@ public interface Auto<E> {
 
     boolean removed(E element);
 
-
 }

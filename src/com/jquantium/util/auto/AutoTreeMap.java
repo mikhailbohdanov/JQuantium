@@ -1,6 +1,6 @@
 package com.jquantium.util.auto;
 
-import java.util.TreeMap;
+        import java.util.TreeMap;
 
 /**
  * Created by Mykhailo_Bohdanov on 01/10/2015.
@@ -12,6 +12,5 @@ public abstract class AutoTreeMap<K, E> extends AutoMap<K, E> implements Auto<E>
 
     public AutoTreeMap(AutoList<E> autoList) {
         super(autoList);
-
     }
 }

@@ -12,6 +12,5 @@ public abstract class AutoHashMap<K, E> extends AutoMap<K, E> implements Auto<E>
 
     public AutoHashMap(AutoList<E> autoList) {
         super(autoList);
-
     }
 }

@@ -34,13 +34,19 @@ public class AutoList<E> {
         }
     }
 
+
+
+    public AutoList() {
+
+    }
+
+
+
     public void create(E element) {
         if (elements.add(element)) {
             _add(element);
         }
     }
-
-
 
     public E get(int index) {
         return elements.get(index);

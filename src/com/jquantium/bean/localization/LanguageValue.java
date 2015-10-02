@@ -21,4 +21,5 @@ public class LanguageValue {
     @Column(length = 4096)
     private String value;
 
+
 }

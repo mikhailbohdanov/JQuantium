@@ -25,4 +25,42 @@ public class Selection {
     public String getAlias() {
         return alias;
     }
+
+    public String fetchSelect() {
+        return fetchSelect(new StringBuilder()).toString();
+    }
+    public StringBuilder fetchSelect(StringBuilder out) {
+        out
+                .append("`")
+                .append(column.getTable().getTableName())
+                .append("`.`")
+                .append(column.getName())
+                .append("`");
+
+        if (alias != null && !alias.isEmpty()) {
+            out
+                    .append(" AS `")
+                    .append(alias)
+                    .append("`");
+        }
+
+        return out;
+    }
+
+    public String fetchWhere() {
+        return fetchWhere(new StringBuilder()).toString();
+    }
+    public StringBuilder fetchWhere(StringBuilder out) {
+        out
+                .append("`")
+                .append(column.getTable().getTableName())
+                .append("`.`")
+                .append(column.getName())
+                .append("`");
+
+        return out;
+    }
+
+
+
 }

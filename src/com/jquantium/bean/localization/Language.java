@@ -2,12 +2,14 @@ package com.jquantium.bean.localization;
 
 import com.jquantium.dao.annotation.Column;
 import com.jquantium.dao.annotation.Table;
+import com.jquantium.util.auto.AutoList;
 
 /**
  * Created by Mykhailo_Bohdanov on 26/06/2015.
  */
 @Table(name = "core_languages")
 public class Language {
+    private AutoList<LanguageValue> values;
 
     @Column(primary = true, length = 10, autoIncrement = true, unsigned = true)
     private int languageId;
@@ -26,6 +28,10 @@ public class Language {
         this.code = code;
         this.name = name;
         this.enable = enable;
+
+        if (languageId > 0) {
+            values = new AutoList<>();
+        }
     }
 
     public int getLanguageId() {

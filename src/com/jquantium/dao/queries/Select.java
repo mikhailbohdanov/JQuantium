@@ -7,6 +7,7 @@ import com.jquantium.helper.DAOHelper;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -89,26 +90,19 @@ public class Select<E> {
         query.append("SELECT");
 
         if (selections != null && selections.size() > 0) {
-            for (Selection selection : selections) {
-                columnInstance  = selection.getColumn();
+            Iterator<Selection> iterator = selections.iterator();
+            boolean hasNext = false;
 
-                query
-                        .append(" `")
-                        .append(columnInstance
-                                .getTable()
-                                .getTableName())
-                        .append("`.`")
-                        .append(columnInstance
-                                .getName())
-                        .append("`");
+            do {
+                hasNext = iterator.hasNext();
 
-                if ((tmp = selection.getAlias()) != null && !tmp.isEmpty()) {
-                    query
-                            .append(" AS `")
-                            .append(tmp)
-                            .append("`");
+                iterator.next().fetchSelect(query);
+
+                if (hasNext) {
+                    query.append(", ");
                 }
-            }
+
+            } while (hasNext);
         } else {
             query.append(" *");
         }
