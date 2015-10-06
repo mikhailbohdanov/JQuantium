@@ -5,9 +5,12 @@ import com.jquantium.dao.annotation.Table;
 import com.jquantium.dao.instance.ColumnInstance;
 import com.jquantium.dao.instance.TableInstance;
 import com.jquantium.dao.queries.Select;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,8 +80,5 @@ public class DAOHelper {
 
         return select;
     }
-
-
-
 
 }

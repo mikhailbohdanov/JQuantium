@@ -36,10 +36,54 @@ public class DAO {
         dataMap.put(id, new NamedParameterJdbcTemplate(source));
     }
 
+    private int putRow(String sql, MapSqlParameterSource map, NamedParameterJdbcTemplate jdbc) throws Exception {
+        if (sql == null || sql.isEmpty()) {
+            throw new Exception();
+        }
+
+        if (map == null) {
+            map = new MapSqlParameterSource();
+        }
+
+        if (jdbc == null) {
+            jdbc = getJdbc();
+        }
+
+        KeyHolder key = new GeneratedKeyHolder();
+
+        try {
+            jdbc.update(sql, map, key);
+        } catch (Exception e) {
+            throw e;
+        }
+
+        return key.getKey().intValue();
+    }
+
+    private <E> E getRow(String sql, MapSqlParameterSource map, Class<E> eClass, NamedParameterJdbcTemplate jdbc) throws Exception {
+        if (sql == null || sql.isEmpty() || eClass == null) {
+            throw new Exception();
+        }
+
+        if (map == null) {
+            map = new MapSqlParameterSource();
+        }
+
+        if (jdbc == null) {
+            jdbc = getJdbc();
+        }
+
+        return jdbc.queryForObject(sql, map, eClass);
+    }
+
+    private <E> List<E> getRowList(String sql, MapSqlParameterSource map, Class<E> eClass, NamedParameterJdbcTemplate jdbc) throws Exception {
+        return null;
+    }
+
+
     public int putRow(String sql, MapSqlParameterSource map) throws Exception {
         return putRow(sql, map, 0);
     }
-
     public int putRow(String sql, MapSqlParameterSource map, int nodeId) throws Exception {
         NamedParameterJdbcTemplate jdbc = getJdbc();
         KeyHolder key = new GeneratedKeyHolder();
@@ -61,7 +105,6 @@ public class DAO {
     public <E> E getRow(String sql, MapSqlParameterSource map, Class<E> eClass) throws Exception {
         return getRow(sql, map, eClass, 0);
     }
-
     public <E> E getRow(String sql, MapSqlParameterSource map, Class<E> eClass, int nodeId) throws Exception {
         return null;
     }
@@ -69,7 +112,6 @@ public class DAO {
     public <E> List<E> getRowList(String sql, MapSqlParameterSource map, Class<E> eClass) throws Exception {
         return getRowList(sql, map, eClass, 0);
     }
-
     public <E> List<E> getRowList(String sql, MapSqlParameterSource map, Class<E> eClass, int nodeId) throws Exception {
         return null;
     }
@@ -77,7 +119,6 @@ public class DAO {
     public void exec(String sql, MapSqlParameterSource map) throws Exception {
         exec(sql, map, 0);
     }
-
     public void exec(String sql, MapSqlParameterSource map, int nodeId) throws Exception {
         return;
     }
@@ -85,9 +126,14 @@ public class DAO {
     public <E> E exec(String sql, MapSqlParameterSource map, Class<E> eClass) throws Exception {
         return exec(sql, map, eClass, 0);
     }
-
     public <E> E exec(String sql, MapSqlParameterSource map, Class<E> eClass, int nodeId) throws Exception {
         return null;
     }
+
+
+
+
+
+
 
 }
