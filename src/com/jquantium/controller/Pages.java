@@ -5,8 +5,7 @@ import com.jquantium.bean.core.Route;
 import com.jquantium.bean.view.PageContext;
 import com.jquantium.bean.view.page.Page;
 import com.jquantium.helper.ContextHelper;
-import com.jquantium.service.Router;
-import com.jquantium.service.View;
+import com.jquantium.service.CORE;
 import com.jquantium.util.error.PageNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,36 +31,31 @@ public class Pages {
         Route route         = null;
 
         try {
-            page            = View.getPage(currentUrl);
+            page            = CORE.view.getPage(currentUrl);
         } catch (PageNotFoundException e) {}
 
         if (page == null) {
             try {
-                route       = Router.findRoute(currentUrl);
-                page        = View.getPage(route.getOwnerId());
+                route       = CORE.router.getRoute(currentUrl.replaceAll("^/", ""));
+
+                if (route != null) {
+                    switch (route.getType()) {
+                        case PAGE:
+
+                            break;
+                        case USER:
+
+                            break;
+                        case GROUP:
+
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
             } catch (PageNotFoundException e) {}
         }
-
-        //TODO maybe realize in other method
-//        if (page == null) {
-//            try {
-//                route       = Router.getRoute(currentUrl.replaceAll("^/", ""));
-//
-//                if (route != null) {
-//                    switch (route.getType()) {
-//                        case PAGE:
-//
-//                            break;
-//                        case USER:
-//
-//                            break;
-//                        case GROUP:
-//
-//                            break;
-//                    }
-//                }
-//            } catch (PageNotFoundException e) {}
-//        }
 
         if (page != null) {
 

@@ -29,6 +29,14 @@ public abstract class AutoMap<K, E> implements GeneratedKey<K, E>, Auto<E> {
         return elements.get(key);
     }
 
+    public boolean containsKey(K key) {
+        return elements.containsKey(key);
+    }
+
+    public boolean containsValue(E value) {
+        return elements.containsValue(value);
+    }
+
     @Override
     public boolean added(E element) {
         return elements.put(getKey(element), element) != null;

@@ -30,12 +30,12 @@ public class ContextHelper {
     public static PageContext newPageContext(HttpServletRequest request, HttpServletResponse response, Model model, Url url) {
         PageContext PC  = new PageContext(request, response, model);
 
-//        PC.setLanguage();
+        PC.setLanguage();
 
-//        if (url == null)
-//            PC.setUrl(new Url(request));
-//        else
-//            PC.setUrl(url);
+        if (url == null)
+            PC.setUrl(new Url(request));
+        else
+            PC.setUrl(url);
 
         return PC;
     }

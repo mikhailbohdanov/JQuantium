@@ -21,13 +21,13 @@ public class Language {
     private String name;
 
     @Column
-    private boolean enable;
+    private boolean enabled;
 
-    public Language(int languageId, String code, String name, boolean enable) {
+    public Language(int languageId, String code, String name, boolean enabled) {
         this.languageId = languageId;
         this.code = code;
         this.name = name;
-        this.enable = enable;
+        this.enabled = enabled;
 
         if (languageId > 0) {
             values = new AutoList<>();
@@ -50,12 +50,12 @@ public class Language {
         this.name = name;
     }
 
-    public boolean isEnable() {
-        return enable;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setEnable(boolean enable) {
-        this.enable = enable;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
 }

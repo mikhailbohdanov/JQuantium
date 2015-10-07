@@ -17,7 +17,7 @@ public @interface Column {
     boolean primary() default false;
     String unique() default "";
 
-    int length() default 255;
+    int length() default 256;
     boolean unsigned() default false;
     boolean autoIncrement() default false;
 

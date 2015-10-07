@@ -22,7 +22,12 @@ public class Context {
         this.response = response;
     }
 
+    public void setUrl(Url url) {
+        this.url = url;
+    }
+
     public Url getUrl() {
         return url;
     }
+
 }
