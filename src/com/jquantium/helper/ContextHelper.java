@@ -13,10 +13,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ContextHelper {
 
-    public static Context getContext(HttpServletRequest request, HttpServletResponse response) {
+    public static Context newContext(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
-
 
     public static PageContext newPageContext(HttpServletRequest request, Model model) {
         return newPageContext(request, null, model, null);
@@ -32,14 +31,45 @@ public class ContextHelper {
 
         PC.setLanguage();
 
-        if (url == null)
+        if (url == null) {
             PC.setUrl(new Url(request));
-        else
+        } else {
             PC.setUrl(url);
+        }
 
         return PC;
     }
 
+    public static boolean hasAjax(HttpServletRequest request) {
+        String param = null;
+        boolean ajax = false;
+
+        try {
+            if ((param = request.getHeader("X-REQUESTED-WITH")) != null && param.equals("XMLHttpRequest")) {
+                ajax = true;
+            }
+        } catch (Exception e){}
+
+        if (!ajax) {
+            try {
+                if ((param = request.getHeader("HTTP-X-REQUESTED-WITH")) != null && param.equals("XMLHttpRequest")) {
+                    ajax = true;
+                }
+            } catch (Exception e) {}
+
+            if (!ajax || (param = request.getParameter("_ajax")) != null) {
+                try {
+                    if (param.equals("true")) {
+                        ajax = true;
+                    } else if (param.equals("false")) {
+                        ajax = false;
+                    }
+                } catch (Exception e) {}
+            }
+        }
+
+        return ajax;
+    }
 
 
 }

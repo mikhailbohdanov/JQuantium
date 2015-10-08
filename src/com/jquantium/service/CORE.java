@@ -1,10 +1,12 @@
 package com.jquantium.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by Mykhailo_Bohdanov on 07/10/2015.
  */
+@Service
 public class CORE {
     public static Localization localization;
     public static View view;

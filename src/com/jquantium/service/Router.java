@@ -1,15 +1,16 @@
 package com.jquantium.service;
 
 import com.jquantium.bean.core.Route;
-import com.jquantium.bean.view.page.Page;
 import com.jquantium.util.auto.AutoHashMap;
 import com.jquantium.util.auto.AutoList;
 import com.jquantium.util.auto.AutoTreeMap;
 import com.jquantium.util.error.PageNotFoundException;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by Mykhailo_Bohdanov on 08/07/2015.
  */
+@Service
 public class Router {
     private AutoList<Route> routes = new AutoList<>();
     private AutoHashMap<Integer, Route> routesById = new AutoHashMap<Integer, Route>(routes) {

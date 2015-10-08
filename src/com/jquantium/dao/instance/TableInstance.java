@@ -1,7 +1,7 @@
 package com.jquantium.dao.instance;
 
-import com.jquantium.util.StringTemplate;
 import com.jquantium.dao.annotation.Table;
+import com.jquantium.util.primitive.Template;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +12,16 @@ import java.util.TreeMap;
  * Created by Mykhailo_Bohdanov on 02/07/2015.
  */
 public class TableInstance<E> {
-    private StringTemplate tableName;
+    private Template tableName;
     
     private List<ColumnInstance> columns                = new ArrayList<>();
     private Map<String, ColumnInstance> columnsByName   = new TreeMap<>();
 
     public TableInstance(Table tableInfo, Class tClass) {
-        this.tableName = new StringTemplate(tableInfo.name());
+        this.tableName = new Template(tableInfo.name());
     }
 
-    public StringTemplate getTableName() {
+    public Template getTableName() {
         return tableName;
     }
 

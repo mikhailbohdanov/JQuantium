@@ -1,9 +1,9 @@
 package com.jquantium.bean.view;
 
-import com.jquantium.bean.Url;
 import com.jquantium.bean.core.Context;
 import com.jquantium.bean.localization.Language;
-import com.jquantium.bean.user.User;
+import com.jquantium.bean.view.page.Page;
+import com.jquantium.bean.view.page.PageView;
 import com.jquantium.service.CORE;
 import org.springframework.ui.Model;
 
@@ -14,12 +14,13 @@ import javax.servlet.http.HttpServletResponse;
  * Created by Mykhailo_Bohdanov on 01/07/2015.
  */
 public class PageContext extends Context {
+    private Model model;
     private String module;
     private String action;
-    private Model model;
 
-    private User user;
-    private Language language;
+    private Page page;
+    private PageView pageView;
+
 
     protected PageContext() {
         super();
@@ -31,6 +32,14 @@ public class PageContext extends Context {
         this.model = model;
     }
 
+    public Model getModel() {
+        return model;
+    }
+    private void setModel(Model model) {
+        this.model = model;
+
+        model.addAttribute("PC", this);
+    }
 
     public PageContext setView(String module, String action) {
         this.module = module;
@@ -38,10 +47,18 @@ public class PageContext extends Context {
 
         return this;
     }
+
+    public String getModule() {
+        return module;
+    }
     public PageContext setModule(String module) {
         this.module = module;
 
         return this;
+    }
+
+    public String getAction() {
+        return action;
     }
     public PageContext setAction(String action) {
         this.action = action;
@@ -49,35 +66,23 @@ public class PageContext extends Context {
         return this;
     }
 
-    public PageContext setLanguage() {
-        String code = null;
-        Object attr;
-
-        if (request != null) {
-            if ((code = request.getParameter("language")) == null || !CORE.localization.hasLanguage(code)) {
-                if (user == null || (code = user.getLanguageCode()) == null || !CORE.localization.hasLanguage(code)) {
-                    if (request.getSession() == null || (attr = request.getSession().getAttribute("language")) == null || (code = String.valueOf(attr)).equals(null) || CORE.localization.hasLanguage(code)) {
-                        if (request.getLocale() == null || (code = request.getLocale().getLanguage()) == null || CORE.localization.hasLanguage(code)) {
-                            code = null;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (code == null || (language = CORE.localization.getLanguage(code)) == null || !language.isEnabled())
-            code = CORE.config.getString("CORE", "defaultLanguage");
-
-        language    = CORE.localization.getLanguage(code);
-
+    public Page getPage() {
+        return page;
+    }
+    public PageContext setPage(Page page) {
+        this.page = page;
         return this;
     }
 
+    public PageView getPageView() {
+        return pageView;
+    }
+    public PageContext setPageView(PageView pageView) {
+        this.pageView = pageView;
+        return this;
+    }
 
-
-
-
-    public String render() {
+    public String fetch() {
         return "";
     }
 

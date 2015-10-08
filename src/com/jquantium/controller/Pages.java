@@ -4,6 +4,7 @@ import com.jquantium.bean.Url;
 import com.jquantium.bean.core.Route;
 import com.jquantium.bean.view.PageContext;
 import com.jquantium.bean.view.page.Page;
+import com.jquantium.bean.view.page.PageView;
 import com.jquantium.helper.ContextHelper;
 import com.jquantium.service.CORE;
 import com.jquantium.util.error.PageNotFoundException;
@@ -41,7 +42,7 @@ public class Pages {
                 if (route != null) {
                     switch (route.getType()) {
                         case PAGE:
-
+                            page = CORE.view.getPage(route.getOwnerId());
                             break;
                         case USER:
 
@@ -58,7 +59,7 @@ public class Pages {
         }
 
         if (page != null) {
-
+            PC.setPage(page);
 
 
             //TODO here build page by Page
@@ -66,7 +67,13 @@ public class Pages {
             //TODO here 404 error
         }
 
-        return PC.render();
+        return PC.setView("render", "page").fetch();
     }
+
+    public PageView getPageView(PageContext PC) {
+        return null;
+    }
+
+
 
 }
