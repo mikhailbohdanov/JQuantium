@@ -21,7 +21,6 @@ public class PageContext extends Context {
     private Page page;
     private PageView pageView;
 
-
     protected PageContext() {
         super();
     }
@@ -80,6 +79,40 @@ public class PageContext extends Context {
     public PageContext setPageView(PageView pageView) {
         this.pageView = pageView;
         return this;
+    }
+
+    public PageContext initPage(String title, String keywords, String description) {
+        this.page       = new Page();
+        this.pageView   = new PageView();
+
+        this.pageView
+                .setTitle(title)
+                .setKeyWords(keywords)
+                .setDescription(description);
+
+        return this;
+    }
+
+    public String getTitle() {
+        if (pageView == null) {
+            return null;
+        }
+
+        return pageView.getTitle();
+    }
+    public String getKeywords() {
+        if (pageView == null) {
+            return null;
+        }
+
+        return pageView.getKeyWords();
+    }
+    public String getDescription() {
+        if (pageView == null) {
+            return null;
+        }
+
+        return pageView.getDescription();
     }
 
     public String fetch() {

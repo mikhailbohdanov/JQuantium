@@ -8,6 +8,8 @@ public class Page {
     private String name;
     private String url;
 
+    public Page() {}
+
     public Page(int pageId, String name, String url) {
         this.pageId = pageId;
         this.name = name;

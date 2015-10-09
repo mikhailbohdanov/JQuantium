@@ -61,13 +61,26 @@ public class Pages {
         if (page != null) {
             PC.setPage(page);
 
+            if (checkPageAccess(PC)) {
+                PageView pageView = getPageView(PC);
 
-            //TODO here build page by Page
+                if (pageView != null) {
+                    //TODO here build page by Page
+                } else {
+                    //TODO some trouble
+                }
+            } else {
+                //TODO here 403 error
+            }
         } else {
             //TODO here 404 error
         }
 
         return PC.setView("render", "page").fetch();
+    }
+
+    public boolean checkPageAccess(PageContext PC) {
+        return true;
     }
 
     public PageView getPageView(PageContext PC) {

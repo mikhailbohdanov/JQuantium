@@ -10,6 +10,8 @@ public class PageView {
     private String keyWords;
     private String description;
 
+    public PageView() {}
+
     public PageView(int pageId, String title, String keyWords, String description) {
         this.pageId = pageId;
         this.title = title;

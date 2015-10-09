@@ -63,6 +63,17 @@ public class Context {
         return this;
     }
 
+    public Language getLanguage() {
+        return language;
+    }
+    public String getWord(String key) {
+        if (language != null) {
+            return language.getWord(key);
+        }
+
+        return null;
+    }
+
     public boolean setLanguage() {
         String code = null;
         Object attr;

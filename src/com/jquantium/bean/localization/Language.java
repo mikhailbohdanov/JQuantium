@@ -58,4 +58,7 @@ public class Language {
         this.enabled = enabled;
     }
 
+    public String getWord(String key) {
+        return null;
+    }
 }
