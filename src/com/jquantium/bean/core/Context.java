@@ -81,7 +81,7 @@ public class Context {
         if (request != null) {
             if ((code = request.getParameter("language")) == null || !CORE.localization.hasLanguage(code)) {
                 if (user == null || (code = user.getLanguageCode()) == null || !CORE.localization.hasLanguage(code)) {
-                    if (request.getSession() == null || (attr = request.getSession().getAttribute("language")) == null || (code = String.valueOf(attr)).equals(null) || CORE.localization.hasLanguage(code)) {
+                    if (request.getSession() == null || (attr = request.getSession().getAttribute("language")) == null || "null".equals(code = String.valueOf(attr)) || CORE.localization.hasLanguage(code)) {
                         if (request.getLocale() == null || (code = request.getLocale().getLanguage()) == null || CORE.localization.hasLanguage(code)) {
                             code = null;
                         }

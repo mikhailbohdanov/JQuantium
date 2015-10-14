@@ -2,11 +2,11 @@ package com.jquantium.bean;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Михаил on 26.08.14.
@@ -26,7 +26,34 @@ public final class Url {
             return null;
         }
     }
+    public static final Pattern urlPattern = Pattern.compile("^([A-z:]+:)?(?:\\/\\/)?(?:([\\w\\-.@]*)(?::(.*))?@)?([\\w\\-.]+)?(?::([0-9]+))?(?:(\\/)([^?#\\s\\/]+)?|([^?#\\s]*\\/)([^?#\\s\\/]*))?(?:\\?([^#]*))?(?:#(.*))?$");
 
+    public static Url parse(String urlString) {
+        return parse(urlString, new Url());
+    }
+    public static Url parse(String urlString, Url context) {
+        String tmp;
+        int index;
+        String[] vars;
+
+        if (context == null) {
+            context = new Url();
+        }
+
+        Matcher matcher = urlPattern.matcher(urlString);
+
+        context
+                .setProtocol(matcher)
+                .setUserInfo(matcher)
+                .setDomain(matcher)
+                .setPort(matcher)
+                .setPath(matcher)
+                .setFile(matcher)
+                .setSearch(matcher)
+                .setHash(matcher);
+
+        return context;
+    }
     public static Map<String, List<String>> parseSearch(String search) {
         Map<String, List<String>> parsedData = new TreeMap<>();
 
@@ -56,21 +83,22 @@ public final class Url {
     private String protocol;
     private String userName;
     private String password;
-    private String host;
+    private String domain;
     private int port;
     private String path;
+    private String file;
     private Map<String, List<String>> search;
     private String hash;
 
     public Url() {}
-    public Url(String pattern) {
-        parse(pattern, this);
+    public Url(String url) {
+        parse(url, this);
     }
     public Url(HttpServletRequest request) {
-        this.path = request.getRequestURI().replaceAll("/$", "");
+        setPath(request.getRequestURI().replaceAll("/$", ""));
 
-        if (this.path.isEmpty()) {
-            this.path = "/";
+        if (path.isEmpty()) {
+            path = "/";
         }
 
         List<String> values;
@@ -81,53 +109,8 @@ public final class Url {
                 values.add(value);
             }
 
-            this.setSearch(entry.getKey(), values);
+            setSearch(entry.getKey(), values);
         }
-    }
-
-    public static Url parse(String urlString) {
-        return parse(urlString, new Url());
-    }
-    public static Url parse(String urlString, Url context) {
-        String tmp;
-        int index;
-        String[] vars;
-
-        if (context == null) {
-            context = new Url();
-        }
-
-        URL url = null;
-        try {
-            url = new URL(urlString);
-        } catch (MalformedURLException e) {}
-
-        if (url != null) {
-            context.setProtocol(url.getProtocol());
-
-            if ((tmp = url.getUserInfo()) != null) {
-                vars    = tmp.split(":");
-
-                if (vars.length > 1) {
-                    context.setUserName(vars[0]);
-                    context.setPassword(vars[1]);
-                } else {
-                    context.setUserName(vars[0]);
-                }
-            }
-
-            context.setHost(url.getHost());
-
-            context.setPort(url.getPort());
-
-            context.setPath(url.getPath());
-
-            context.setSearch(url.getQuery());
-
-            context.setHash(url.getRef());
-        }
-
-        return context;
     }
 
     public String getProtocol() {
@@ -138,6 +121,15 @@ public final class Url {
             this.protocol = null;
         } else {
             this.protocol = protocol;
+        }
+
+        return this;
+    }
+    public Url setProtocol(Matcher matcher) {
+        String tmp;
+
+        if (matcher != null && matcher.matches() && (tmp = matcher.group(1)) != null) {
+            setProtocol(tmp.substring(0, tmp.length() - 1));
         }
 
         return this;
@@ -155,6 +147,13 @@ public final class Url {
 
         return this;
     }
+    public Url setUserName(Matcher matcher) {
+        if (matcher != null && matcher.matches()) {
+            setUserName(matcher.group(2));
+        }
+
+        return this;
+    }
 
     public String getPassword() {
         return password;
@@ -168,15 +167,67 @@ public final class Url {
 
         return this;
     }
+    public Url setPassword(Matcher matcher) {
+        if (matcher != null && matcher.matches()) {
+            setPassword(matcher.group(3));
+        }
 
-    public String getHost() {
-        return host;
+        return this;
     }
-    public Url setHost(String host) {
-        if (host == null || host.isEmpty()) {
-            this.host = null;
+
+    public String getUserInfo() {
+        if (userName == null && password == null) {
+            return null;
+        } else if (password == null) {
+            return userName;
         } else {
-            this.host = host;
+            StringBuilder userInfo = new StringBuilder();
+
+            userInfo
+                    .append(userName)
+                    .append(":")
+                    .append(password);
+
+            return userInfo.toString();
+        }
+    }
+    public Url setUserInfo(String userInfo) {
+        String[] vars;
+
+        if (userInfo != null && !userInfo.isEmpty()) {
+            vars    = userInfo.split(":");
+
+            if (vars.length > 1) {
+                this.userName   = vars[0];
+                this.password   = vars[1];
+            } else
+                this.userName   = vars[0];
+        }
+
+        return this;
+    }
+    public Url setUserInfo(Matcher matcher) {
+        setUserName(matcher);
+        setPassword(matcher);
+
+        return this;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+    public Url setDomain(String domain) {
+        if (domain == null || domain.isEmpty()) {
+            this.domain = null;
+        } else {
+            this.domain = domain;
+        }
+
+        return this;
+    }
+    public Url setDomain(Matcher matcher) {
+        if (matcher != null && matcher.matches()) {
+            setDomain(matcher.group(4));
         }
 
         return this;
@@ -190,9 +241,26 @@ public final class Url {
 
         return this;
     }
+    public Url setPort(String port) {
+        if (port != null && !port.isEmpty()) {
+            setPort(Integer.parseInt(port));
+        }
+
+        return this;
+    }
+    public Url setPort(Matcher matcher) {
+        if (matcher != null && matcher.matches()) {
+            setPort(matcher.group(5));
+        }
+
+        return this;
+    }
 
     public String getPath() {
         return path;
+    }
+    public String getPathFull() {
+        return path + "/" + file;
     }
     public Url setPath(String path) {
         if (path == null || path.isEmpty()) {
@@ -203,12 +271,59 @@ public final class Url {
 
         return this;
     }
+    public Url setPath(Matcher matcher) {
+        if (matcher != null && matcher.matches()) {
+            String tmp = matcher.group(6);
+
+            if (tmp != null) {
+                setPath(tmp);
+            } else {
+                setPath(matcher.group(8));
+            }
+        }
+
+        return this;
+    }
+    public Url setPathFull(String path) {
+        Matcher matcher = urlPattern.matcher(path);
+
+        setPath(matcher);
+        setFile(matcher);
+
+        return this;
+    }
+
+    public String getFile() {
+        return file;
+    }
+    public Url setFile(String file) {
+        if (file == null || file.isEmpty()) {
+            this.file = null;
+        } else {
+            this.file = file;
+        }
+
+        return this;
+    }
+    public Url setFile(Matcher matcher) {
+        if (matcher != null && matcher.matches()) {
+            String tmp = matcher.group(7);
+
+            if (tmp != null) {
+                setFile(tmp);
+            } else {
+                setFile(matcher.group(9));
+            }
+        }
+
+        return this;
+    }
 
     public Map<String, List<String>> getSearch() {
         return search;
     }
     public List<String> getSearch(String searchKey) {
-        if (searchKey == null) {
+        if (searchKey == null || search == null) {
             return null;
         }
 
@@ -220,6 +335,21 @@ public final class Url {
         }
 
         return search.get(searchKey).get(index);
+    }
+
+    public Url setSearch(Matcher matcher) {
+        if (matcher != null && matcher.matches()) {
+            setSearch(matcher.group(10));
+        }
+
+        return this;
+    }
+    public Url addSearch(Matcher matcher) {
+        if (matcher != null && matcher.matches()) {
+            addSearch(matcher.group(8));
+        }
+
+        return this;
     }
 
     public Url setSearch(String search) {
@@ -250,7 +380,7 @@ public final class Url {
     }
     public Url addSearch(Map<String, List<String>> searchData) {
         if (searchData == null) {
-            this.search = null;
+            return this;
         } else {
             if (this.search == null) {
                 this.search = searchData;
@@ -276,6 +406,10 @@ public final class Url {
         if (searchKey != null && !searchKey.isEmpty() && searchValue != null && !searchValue.isEmpty()) {
             List<String> searchValues;
 
+            if (search == null) {
+                search = new TreeMap<>();
+            }
+
             if (search.containsKey(searchKey)) {
                 searchValues = search.get(searchKey);
             } else {
@@ -294,6 +428,10 @@ public final class Url {
     public Url addSearch(String searchKey, String searchValue, int index) {
         if (searchKey != null && !searchKey.isEmpty() && searchValue != null && !searchValue.isEmpty()) {
             List<String> searchValues;
+
+            if (search == null) {
+                search = new TreeMap<>();
+            }
 
             if (search.containsKey(searchKey)) {
                 searchValues = search.get(searchKey);
@@ -314,6 +452,10 @@ public final class Url {
 
     public Url setSearch(String searchKey, List<String> searchValues) {
         if (searchKey != null) {
+            if (search == null) {
+                search = new TreeMap<>();
+            }
+
             search.put(searchKey, searchValues);
         }
 
@@ -321,6 +463,10 @@ public final class Url {
     }
     public Url addSearch(String searchKey, List<String> searchValues) {
         if (searchKey != null) {
+            if (search == null) {
+                search = new TreeMap<>();
+            }
+
             if (search.containsKey(searchKey)) {
                 search.get(searchKey).addAll(searchValues);
             } else {
@@ -332,14 +478,14 @@ public final class Url {
     }
 
     public Url deleteSearch(String searchKey) {
-        if (search != null) {
+        if (searchKey != null && search != null) {
             search.remove(searchKey);
         }
 
         return this;
     }
     public Url deleteSearch(String searchKey, int index) {
-        if (search != null && search.containsKey(searchKey)) {
+        if (searchKey != null && search != null && search.containsKey(searchKey)) {
             search.get(searchKey).remove(index);
         }
 
@@ -347,11 +493,9 @@ public final class Url {
     }
 
     public boolean matchSearch(String search) {
-        if (search == null && (this.search == null || this.search.isEmpty())) {
+        if ((search == null || search.isEmpty()) && (this.search == null || this.search.isEmpty())) {
             return true;
-        } else if (search == null) {
-            return false;
-        } else if (this.search == null) {
+        } else if (search == null || search.isEmpty() || this.search == null || this.search.isEmpty()) {
             return false;
         }
 
@@ -380,6 +524,13 @@ public final class Url {
             this.hash = null;
         } else {
             this.hash = hash;
+        }
+
+        return this;
+    }
+    public Url setHash(Matcher matcher) {
+        if (matcher != null && matcher.matches()) {
+            setHash(matcher.group(11));
         }
 
         return this;
@@ -417,28 +568,20 @@ public final class Url {
     }
 
     private void _host(StringBuilder out) {
-        if (host != null) {
+        if (domain != null) {
             if (protocol != null) {
                 out
-                        .append(protocol.toLowerCase())
+                        .append(protocol)
                         .append("://");
             }
 
             if (userName != null) {
-                out.append(userName);
-
-                if (password != null) {
-                    out
-                            .append(":")
-                            .append(password);
-                }
-
-                out.append("@");
+                out
+                        .append(getUserInfo())
+                        .append("@");
             }
 
-            if (host != null) {
-                out.append(host);
-            }
+            out.append(domain);
 
             if (port > 0) {
                 out
@@ -450,7 +593,8 @@ public final class Url {
     private void _path(StringBuilder out) {
         if (path != null) {
             out
-                    .append(path);
+                    .append(path)
+                    .append(file);
         }
     }
     private void _search(StringBuilder out) {
@@ -499,13 +643,15 @@ public final class Url {
         }
 
         if (replace != null && replace.size() > 0) {
-            if (search == null || search.size() == 0)
+            if (search == null || search.size() == 0) {
                 out.append("?");
+            }
 
-            String lastChar = String.valueOf(out.charAt(out.length()-1));
+            String lastChar = String.valueOf(out.charAt(out.length() - 1));
 
-            if (!"?".equals(lastChar) && !"&".equals(lastChar))
+            if (!"?".equals(lastChar) && !"&".equals(lastChar)) {
                 out.append("&");
+            }
 
             i = replace.size();
 
@@ -515,8 +661,9 @@ public final class Url {
                         .append("=")
                         .append(URLEncodeEncode(entry.getValue()));
 
-                if (i-- > 1)
+                if (i-- > 1) {
                     out.append("&");
+                }
             }
         }
     }

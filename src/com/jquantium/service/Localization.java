@@ -1,13 +1,14 @@
 package com.jquantium.service;
 
 import com.jquantium.bean.localization.Language;
-import com.jquantium.bean.localization.LanguageKey;
 import com.jquantium.dao.ORM;
-import com.jquantium.util.auto.AutoHashMap;
-import com.jquantium.util.auto.AutoList;
-import com.jquantium.util.auto.AutoTreeMap;
+import com.jquantium.util._memory.MemoryHashMap;
+import com.jquantium.util._memory.MemoryList;
+import com.jquantium.util._memory.MemoryTreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by Mykhailo_Bohdanov on 26/06/2015.
@@ -17,31 +18,41 @@ public class Localization {
     @Autowired
     private ORM orm;
 
-    private AutoList<Language> languageList                     = new AutoList<>();
-    private AutoHashMap<Integer, Language> languageById         = new AutoHashMap<Integer, Language>(languageList) {
+    private MemoryList<Language> languageList                   = new MemoryList<Language>() {
+        @Override
+        protected List<Language> init() {
+            try {
+                return orm.selectList(Language.class);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected boolean createElement(Language element) {
+            return false;
+        }
+
+        @Override
+        protected boolean updateElement(Language element) {
+            return false;
+        }
+
+        @Override
+        protected boolean removeElement(Language element) {
+            return false;
+        }
+    };
+    private MemoryHashMap<Integer, Language> languageById       = new MemoryHashMap<Integer, Language>(languageList) {
         @Override
         public Integer getKey(Language language) {
             return language.getLanguageId();
         }
     };
-    private AutoTreeMap<String, Language> languageByCode        = new AutoTreeMap<String, Language>(languageList) {
+    private MemoryTreeMap<String, Language> languageByCode      = new MemoryTreeMap<String, Language>(languageList) {
         @Override
         public String getKey(Language language) {
             return language.getCode();
-        }
-    };
-
-    private AutoList<LanguageKey> languageKeys                  = new AutoList<>();
-    private AutoHashMap<Integer, LanguageKey> languageKeysById  = new AutoHashMap<Integer, LanguageKey>(languageKeys) {
-        @Override
-        public Integer getKey(LanguageKey key) {
-            return key.getKeyId();
-        }
-    };
-    private AutoTreeMap<String, LanguageKey> languageKeysByKey  = new AutoTreeMap<String, LanguageKey>(languageKeys) {
-        @Override
-        public String getKey(LanguageKey key) {
-            return key.getKey();
         }
     };
 
@@ -64,7 +75,6 @@ public class Localization {
     public Language getLanguage(String languageCode) {
         return languageByCode.get(languageCode);
     }
-
 
 
 }

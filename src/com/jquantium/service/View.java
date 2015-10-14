@@ -5,7 +5,6 @@ import com.jquantium.util.auto.AutoHashMap;
 import com.jquantium.util.auto.AutoList;
 import com.jquantium.util.auto.AutoTreeMap;
 import com.jquantium.util.error.PageNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**

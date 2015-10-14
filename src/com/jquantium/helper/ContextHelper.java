@@ -45,23 +45,23 @@ public class ContextHelper {
         boolean ajax = false;
 
         try {
-            if ((param = request.getHeader("X-REQUESTED-WITH")) != null && param.equals("XMLHttpRequest")) {
+            if ((param = request.getHeader("X-REQUESTED-WITH")) != null && "XMLHttpRequest".equals(param)) {
                 ajax = true;
             }
         } catch (Exception e){}
 
         if (!ajax) {
             try {
-                if ((param = request.getHeader("HTTP-X-REQUESTED-WITH")) != null && param.equals("XMLHttpRequest")) {
+                if ((param = request.getHeader("HTTP-X-REQUESTED-WITH")) != null && "XMLHttpRequest".equals(param)) {
                     ajax = true;
                 }
             } catch (Exception e) {}
 
             if (!ajax || (param = request.getParameter("_ajax")) != null) {
                 try {
-                    if (param.equals("true")) {
+                    if ("true".equals(param)) {
                         ajax = true;
-                    } else if (param.equals("false")) {
+                    } else if ("false".equals(param)) {
                         ajax = false;
                     }
                 } catch (Exception e) {}

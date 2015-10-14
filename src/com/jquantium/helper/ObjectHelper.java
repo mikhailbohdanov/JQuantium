@@ -1,13 +1,12 @@
 package com.jquantium.helper;
 
-import javax.servlet.ServletRequest;
-import java.lang.reflect.Field;
+import org.json.simple.parser.JSONParser;
 
 /**
  * Created by Mykhailo_Bohdanov on 06/08/2015.
  */
 public class ObjectHelper {
-
+    public static JSONParser JSONParser = new JSONParser();
 
 //
 //    public static <T> T getFromRequest(Class<T> _class, ServletRequest request) {

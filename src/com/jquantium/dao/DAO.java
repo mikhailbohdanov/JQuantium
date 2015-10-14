@@ -1,5 +1,7 @@
 package com.jquantium.dao;
 
+import com.jquantium.bean.core.DataNode;
+import com.jquantium.util._memory.MemoryList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,6 +19,28 @@ import java.util.List;
  */
 @Service
 public class DAO {
+    private MemoryList<DataNode> dataNodes      = new MemoryList<DataNode>() {
+        @Override
+        protected List<DataNode> init() {
+            return null;
+        }
+
+        @Override
+        protected boolean createElement(DataNode element) {
+            return false;
+        }
+
+        @Override
+        protected boolean updateElement(DataNode element) {
+            return false;
+        }
+
+        @Override
+        protected boolean removeElement(DataNode element) {
+            return false;
+        }
+    };
+
     private static HashMap<Integer, NamedParameterJdbcTemplate> dataMap = new HashMap<>();
 
     private NamedParameterJdbcTemplate getJdbc() {
@@ -27,9 +51,9 @@ public class DAO {
     }
 
     @Autowired
-    void init(@Qualifier("mainFrame") DataSource mainFrame, @Qualifier("userFrame") DataSource userFrame) {
-        addSource(0, mainFrame);
-        addSource(1, userFrame);
+    void init(@Qualifier("main") DataSource mainFrame) {
+
+
     }
 
     public void addSource(int id, DataSource source) {

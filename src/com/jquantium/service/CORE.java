@@ -1,5 +1,6 @@
 package com.jquantium.service;
 
+import com.jquantium.dao.ORM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CORE {
+    public static ORM orm;
     public static Localization localization;
     public static View view;
     public static Router router;
@@ -15,6 +17,10 @@ public class CORE {
 
 
 
+    @Autowired
+    public void setOrm(ORM orm) {
+        CORE.orm = orm;
+    }
 
     @Autowired
     public void setLocalization(Localization localization) {
