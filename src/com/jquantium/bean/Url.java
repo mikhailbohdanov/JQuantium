@@ -97,7 +97,7 @@ public final class Url {
     public Url(HttpServletRequest request) {
         setPath(request.getRequestURI().replaceAll("/$", ""));
 
-        if (path.isEmpty()) {
+        if (path == null || path.isEmpty()) {
             path = "/";
         }
 

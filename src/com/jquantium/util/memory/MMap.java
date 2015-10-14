@@ -11,6 +11,7 @@ public abstract class MMap<K, E> implements GeneratedKey<K, E> {
 
     public MMap(MList<? super E> list) {
         list.registerMap(this);
+        mList = list;
     }
 
     private K findKey(E element) {

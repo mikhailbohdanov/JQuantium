@@ -1,17 +1,16 @@
 package com.jquantium.dao;
 
-import com.jquantium.bean.core.DataNode;
-import com.jquantium.util._memory.MemoryList;
+import com.jquantium.bean.core.node.DataNode;
+import com.jquantium.service.CORE;
+import com.jquantium.service.Nodes;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
-import java.util.HashMap;
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -19,58 +18,15 @@ import java.util.List;
  */
 @Service
 public class DAO {
-    private MemoryList<DataNode> dataNodes      = new MemoryList<DataNode>() {
-        @Override
-        protected List<DataNode> init() {
-            return null;
-        }
+    private DataNode mainNode;
 
-        @Override
-        protected boolean createElement(DataNode element) {
-            return false;
-        }
-
-        @Override
-        protected boolean updateElement(DataNode element) {
-            return false;
-        }
-
-        @Override
-        protected boolean removeElement(DataNode element) {
-            return false;
-        }
-    };
-
-    private static HashMap<Integer, NamedParameterJdbcTemplate> dataMap = new HashMap<>();
-
-    private NamedParameterJdbcTemplate getJdbc() {
-        return getJdbc(0);
-    }
-    private NamedParameterJdbcTemplate getJdbc(int id) {
-        return dataMap.get(id);
-    }
-
-    @Autowired
-    void init(@Qualifier("main") DataSource mainFrame) {
-
-
-    }
-
-    public void addSource(int id, DataSource source) {
-        dataMap.put(id, new NamedParameterJdbcTemplate(source));
+    private DataNode getNode(String nodeName) {
+        return CORE.nodes.getDataNode(nodeName);
     }
 
     private int putRow(String sql, MapSqlParameterSource map, NamedParameterJdbcTemplate jdbc) throws Exception {
-        if (sql == null || sql.isEmpty()) {
-            throw new Exception();
-        }
-
-        if (map == null) {
-            map = new MapSqlParameterSource();
-        }
-
         if (jdbc == null) {
-            jdbc = getJdbc();
+            throw new Exception();
         }
 
         KeyHolder key = new GeneratedKeyHolder();
@@ -85,7 +41,34 @@ public class DAO {
     }
 
     private <E> E getRow(String sql, MapSqlParameterSource map, Class<E> eClass, NamedParameterJdbcTemplate jdbc) throws Exception {
-        if (sql == null || sql.isEmpty() || eClass == null) {
+        if (jdbc == null) {
+            throw new Exception();
+        }
+
+        return jdbc.queryForObject(sql, map, eClass);
+    }
+
+    private <E> List<E> getRowList(String sql, MapSqlParameterSource map, Class<E> eClass, NamedParameterJdbcTemplate jdbc) throws Exception {
+        if (jdbc == null) {
+            throw new Exception();
+        }
+
+        return jdbc.queryForList(sql, map, eClass);
+    }
+
+    @Autowired
+    public void init(Nodes nodes) {
+        mainNode = nodes.getDataNode("main");
+    }
+
+    public int putRow(String sql, MapSqlParameterSource map) throws Exception {
+        return putRow(sql, map, mainNode);
+    }
+    public int putRow(String sql, MapSqlParameterSource map, String nodeName) throws Exception {
+        return putRow(sql, map, getNode(nodeName));
+    }
+    public int putRow(String sql, MapSqlParameterSource map, DataNode node) throws Exception {
+        if (sql == null || node == null || !node.isInited()) {
             throw new Exception();
         }
 
@@ -93,51 +76,43 @@ public class DAO {
             map = new MapSqlParameterSource();
         }
 
-        if (jdbc == null) {
-            jdbc = getJdbc();
-        }
-
-        return jdbc.queryForObject(sql, map, eClass);
-    }
-
-    private <E> List<E> getRowList(String sql, MapSqlParameterSource map, Class<E> eClass, NamedParameterJdbcTemplate jdbc) throws Exception {
-        return null;
-    }
-
-
-    public int putRow(String sql, MapSqlParameterSource map) throws Exception {
-        return putRow(sql, map, 0);
-    }
-    public int putRow(String sql, MapSqlParameterSource map, int nodeId) throws Exception {
-        NamedParameterJdbcTemplate jdbc = getJdbc();
-        KeyHolder key = new GeneratedKeyHolder();
-
-        try {
-            jdbc
-                    .update(
-                            sql,
-                            map,
-                            key
-                    );
-        } catch (Exception e) {
-            throw e;
-        }
-
-        return key.getKey().intValue();
+        return putRow(sql, map, node.getJdbc());
     }
 
     public <E> E getRow(String sql, MapSqlParameterSource map, Class<E> eClass) throws Exception {
-        return getRow(sql, map, eClass, 0);
+        return getRow(sql, map, eClass, mainNode);
     }
-    public <E> E getRow(String sql, MapSqlParameterSource map, Class<E> eClass, int nodeId) throws Exception {
-        return null;
+    public <E> E getRow(String sql, MapSqlParameterSource map, Class<E> eClass, String nodeName) throws Exception {
+        return getRow(sql, map, eClass, getNode(nodeName));
+    }
+    public <E> E getRow(String sql, MapSqlParameterSource map, Class<E> eClass, DataNode node) throws Exception {
+        if (sql == null || eClass == null || node == null || !node.isInited()) {
+            throw new Exception();
+        }
+
+        if (map == null) {
+            map = new MapSqlParameterSource();
+        }
+
+        return getRow(sql, map, eClass, node.getJdbc());
     }
 
     public <E> List<E> getRowList(String sql, MapSqlParameterSource map, Class<E> eClass) throws Exception {
-        return getRowList(sql, map, eClass, 0);
+        return getRowList(sql, map, eClass, mainNode);
     }
-    public <E> List<E> getRowList(String sql, MapSqlParameterSource map, Class<E> eClass, int nodeId) throws Exception {
-        return null;
+    public <E> List<E> getRowList(String sql, MapSqlParameterSource map, Class<E> eClass, String nodeName) throws Exception {
+        return getRowList(sql, map, eClass, getNode(nodeName));
+    }
+    public <E> List<E> getRowList(String sql, MapSqlParameterSource map, Class<E> eClass, DataNode node) throws Exception {
+        if (sql == null || eClass == null || node == null || !node.isInited()) {
+            throw new Exception();
+        }
+
+        if (map == null) {
+            map = new MapSqlParameterSource();
+        }
+
+        return getRowList(sql, map, eClass, node.getJdbc());
     }
 
     public void exec(String sql, MapSqlParameterSource map) throws Exception {

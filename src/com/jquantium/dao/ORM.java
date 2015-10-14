@@ -1,5 +1,6 @@
 package com.jquantium.dao;
 
+import com.jquantium.bean.core.node.Node;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -8,10 +9,9 @@ import java.util.List;
 /**
  * Created by Mykhailo_Bohdanov on 26/08/2015.
  */
-@Repository
+//@Repository
 public class ORM {
-
-    @Autowired
+//    @Autowired
     private DAO dao;
 
     public int insert(Object object) throws Exception {
@@ -58,7 +58,11 @@ public class ORM {
         return selectList(eClass, 0);
     }
     public <E> List<E> selectList(Class<E> eClass, int nodeId) throws Exception {
-        return null;
+        if (eClass == Node.class) {
+            return dao.getRowList("SELECT * FROM `core_nodes`", null, eClass);
+        } else {
+            return null;
+        }
     }
 
     public boolean update(Object object) throws Exception {

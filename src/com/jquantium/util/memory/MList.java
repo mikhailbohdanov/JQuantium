@@ -31,10 +31,14 @@ public abstract class MList<E> {
     }
 
     public MList() {
+        elements = init();
 
+        if (elements == null) {
+            elements = new ArrayList<>();
+        }
     }
     public MList(List<E> elements) {
-
+        this.elements   = elements;
     }
 
     public boolean create(E element) {
@@ -56,13 +60,18 @@ public abstract class MList<E> {
 
         return true;
     }
+    public void addAll(List<E> elements) {
+        elements.forEach(this::add);
+    }
 
     public E get(int index) {
         return elements.get(index);
     }
     public void forEach(Consumer<? super E> action) {
-        Objects.requireNonNull(action);
-        elements.forEach(action::accept);
+        if (elements != null) {
+            Objects.requireNonNull(action);
+            elements.forEach(action::accept);
+        }
     }
 
     public E remove(int index) {
@@ -93,37 +102,7 @@ public abstract class MList<E> {
 
     protected abstract List<E> init();
 
-    protected boolean createElement(E element) {
-        try {
-            CORE.orm.insert(element);
-        } catch (Exception e) {
-            return false;
-        }
-
-        _add(element);
-
-        return true;
-    }
-    protected boolean updateElement(E element) {
-        try {
-            CORE.orm.update(element);
-        } catch (Exception e) {
-            return false;
-        }
-
-        _update(element);
-
-        return true;
-    }
-    protected boolean removeElement(E element) {
-        try {
-            CORE.orm.delete(element);
-        } catch (Exception e) {
-            return false;
-        }
-
-        _remove(element);
-
-        return true;
-    }
+    protected abstract boolean createElement(E element);
+    protected abstract boolean updateElement(E element);
+    protected abstract boolean removeElement(E element);
 }

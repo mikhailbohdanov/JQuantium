@@ -23,11 +23,11 @@ import java.util.List;
 public class DAOOld {
     private HashMap<Integer, NamedParameterJdbcTemplate> dataSources   = new HashMap<Integer, NamedParameterJdbcTemplate>();
 
-    @Autowired
-    void init(@Qualifier("mainFrame") DataSource mainFrame, @Qualifier("userFrame") DataSource userFrame) {
-        addNode(0, mainFrame);
-        addNode(1, userFrame);
-    }
+//    @Autowired
+//    void init(@Qualifier("mainFrame") DataSource mainFrame, @Qualifier("userFrame") DataSource userFrame) {
+//        addNode(0, mainFrame);
+//        addNode(1, userFrame);
+//    }
     public void addNode(int nodeId, DataSource node) {
         dataSources.put(nodeId, new NamedParameterJdbcTemplate(node));
     }

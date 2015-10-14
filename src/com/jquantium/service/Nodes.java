@@ -3,41 +3,92 @@ package com.jquantium.service;
 import com.jquantium.bean.core.node.DataNode;
 import com.jquantium.bean.core.node.Node;
 import com.jquantium.bean.core.node.NodeType;
-import com.jquantium.dao.ORM;
+import com.jquantium.dao.DAO;
 import com.jquantium.util.memory.MHashMap;
 import com.jquantium.util.memory.MList;
-import com.jquantium.util.memory.MMap;
 import com.jquantium.util.memory.MTreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import javax.sql.DataSource;
 import java.util.List;
 
 /**
  * Created by Home on 14.10.2015.
  */
+@Service
 public class Nodes {
     @Autowired
-    private ORM orm;
+    private DAO dao;
 
-    private MList<Node> nodeList                    = new MList<Node>() {
+    private MList<Node> nodeList                            = new MList<Node>() {
         @Override
-        protected List init() {
-            List<Node> list = new ArrayList<>();
+        protected List<Node> init() {
+            return null;
+        }
 
-            list.add(new Node("main", NodeType.DATA_BASE, ""));
+        @Override
+        protected boolean createElement(Node node) {
+            MapSqlParameterSource map = new MapSqlParameterSource();
 
-            return list;
+            map
+                    .addValue("name", node.getName())
+                    .addValue("type", node.getType().name())
+                    .addValue("url", node.getUrl());
+
+            try {
+                dao.putRow("INSERT INTO `core_nodes` (`name`, `type`, `url`) VALUES (:name, :type, :url)", map);
+            } catch (Exception e) {
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        protected boolean updateElement(Node node) {
+            MapSqlParameterSource map = new MapSqlParameterSource();
+
+            map
+                    .addValue("nodeId", node.getNodeId())
+                    .addValue("name", node.getName())
+                    .addValue("type", node.getType().name())
+                    .addValue("url", node.getUrl());
+
+            try {
+                dao.putRow("UPDATE `core_nodes` SET `name` = :name, `type` = :type, `url` = :url WHERE `nodeId` = :nodeId", map);
+            } catch (Exception e) {
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        protected boolean removeElement(Node node) {
+            MapSqlParameterSource map = new MapSqlParameterSource();
+
+            map.addValue("nodeId", node.getNodeId());
+
+            try {
+                dao.putRow("DELETE FROM `core_nodes` WHERE `nodeId` = :nodeId", map);
+            } catch (Exception e) {
+                return false;
+            }
+
+            return true;
         }
     };
-    private MMap<Integer, Node> nodeById            = new MHashMap<Integer, Node>(nodeList) {
+    private MHashMap<Integer, Node> nodeById                = new MHashMap<Integer, Node>(nodeList) {
         @Override
         public Integer getKey(Node node) {
             return node.getNodeId();
         }
     };
 
-    private MMap<String, DataNode> dataNodesByName  = new MTreeMap<String, DataNode>(nodeList) {
+    private MTreeMap<String, DataNode> dataNodesByName      = new MTreeMap<String, DataNode>(nodeList) {
         @Override
         public String getKey(DataNode node) {
             return node.getName();
@@ -54,5 +105,26 @@ public class Nodes {
             }
         }
     };
+
+    @Autowired
+    public void init(@Qualifier("main") DataSource dataSource) {
+        DataNode dataNode = new DataNode("main", NodeType.DATA_BASE, "");
+        dataNode.init(dataSource);
+
+        nodeList.add(dataNode);
+
+        try {
+            nodeList.addAll(dao.getRowList("SELECT * FROM `core_nodes`", null, Node.class, dataNode));
+        } catch (Exception e) {}
+    }
+
+    public Node getNode(int nodeId) {
+        return nodeById.get(nodeId);
+    }
+
+    public DataNode getDataNode(String nodeName) {
+        return dataNodesByName.get(nodeName);
+    }
+
 
 }

@@ -9,17 +9,21 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CORE {
-    public static ORM orm;
+//    public static ORM orm;
+    public static Nodes nodes;
     public static Localization localization;
     public static View view;
     public static Router router;
     public static Config config;
 
-
+//    @Autowired
+//    public void setOrm(ORM orm) {
+//        CORE.orm = orm;
+//    }
 
     @Autowired
-    public void setOrm(ORM orm) {
-        CORE.orm = orm;
+    public void setNodes(Nodes nodes) {
+        CORE.nodes = nodes;
     }
 
     @Autowired
