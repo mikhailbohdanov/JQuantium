@@ -10,6 +10,7 @@ import java.lang.reflect.Field;
 public class ColumnInstance {
     private Field tField;
     private TableInstance tableInstance;
+    private Class type;
 
     private String name;
 
@@ -25,6 +26,7 @@ public class ColumnInstance {
 
     public ColumnInstance(Column columnInfo, Field tField) {
         this.tField         = tField;
+        type                = tField.getType();
 
         if ((this.name = columnInfo.name()) == null || this.name.isEmpty()) {
             this.name       = tField.getName();
@@ -43,7 +45,7 @@ public class ColumnInstance {
         return tableInstance;
     }
 
-    public void setTable(TableInstance tableInstance) {
+    protected void setTable(TableInstance tableInstance) {
         this.tableInstance = tableInstance;
     }
 
@@ -75,4 +77,17 @@ public class ColumnInstance {
         return autoIncrement;
     }
 
+    public Class getType() {
+        return type;
+    }
+
+    public boolean setValue(Object obj, Object value) {
+        try {
+            tField.set(obj, value);
+        } catch (IllegalAccessException e) {
+            return false;
+        }
+
+        return true;
+    }
 }

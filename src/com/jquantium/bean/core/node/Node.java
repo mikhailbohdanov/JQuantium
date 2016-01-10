@@ -1,5 +1,7 @@
 package com.jquantium.bean.core.node;
 
+import com.jquantium.dao.annotation.Column;
+import com.jquantium.dao.annotation.Table;
 import com.jquantium.util.observer.Observable;
 
 import java.util.ArrayList;
@@ -9,14 +11,23 @@ import java.util.function.Consumer;
 /**
  * Created by Home on 14.10.2015.
  */
+@Table(name = "core_nodes")
 public class Node implements Observable<Node> {
     private List<Consumer> actions = new ArrayList<>();
 
+    @Column(primary = true, length = 10, unsigned = true, autoIncrement = true)
     protected int nodeId;
+
+    @Column(unique = "name", length = 64, notNull = true)
     protected String name;
+
+    @Column
     protected NodeType type;
+
+    @Column(length = 0)
     protected String url;
 
+    public Node() {}
     public Node(String name, NodeType type, String url) {
         this.name = name;
         this.type = type;

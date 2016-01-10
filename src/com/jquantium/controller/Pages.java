@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class Pages {
 
-    @RequestMapping(value = "/**", method = RequestMethod.GET)
+//    @RequestMapping(value = "/**", method = RequestMethod.GET)
     public String getPage(HttpServletRequest request, HttpServletResponse response, Model model) {
         PageContext PC = ContextHelper.newPageContext(request, response, model);
 

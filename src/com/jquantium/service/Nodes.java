@@ -4,6 +4,7 @@ import com.jquantium.bean.core.node.DataNode;
 import com.jquantium.bean.core.node.Node;
 import com.jquantium.bean.core.node.NodeType;
 import com.jquantium.dao.DAO;
+import com.jquantium.helper.DAOHelper;
 import com.jquantium.util.memory.MHashMap;
 import com.jquantium.util.memory.MList;
 import com.jquantium.util.memory.MTreeMap;
@@ -88,17 +89,17 @@ public class Nodes {
         }
     };
 
-    private MTreeMap<String, DataNode> dataNodesByName      = new MTreeMap<String, DataNode>(nodeList) {
+    private MTreeMap<String, ? super Node> dataNodesByName      = new MTreeMap<String, Node>(nodeList) {
         @Override
-        public String getKey(DataNode node) {
+        public String getKey(Node node) {
             return node.getName();
         }
 
         @Override
-        protected boolean condition(DataNode node) {
+        protected boolean condition(Node node) {
             switch (node.getType()) {
                 case DATA_BASE:
-                    node.init();
+                    ((DataNode) node).init();
                     return true;
                 default:
                     return false;
@@ -112,9 +113,10 @@ public class Nodes {
         dataNode.init(dataSource);
 
         nodeList.add(dataNode);
+        dao.setMainNode(dataNode);
 
         try {
-            nodeList.addAll(dao.getRowList("SELECT * FROM `core_nodes`", null, Node.class, dataNode));
+            nodeList.addAll(dao.readRows("SELECT * FROM `core_nodes`", null, dataNode.getJdbc(), Node.class));
         } catch (Exception e) {}
     }
 
@@ -123,7 +125,7 @@ public class Nodes {
     }
 
     public DataNode getDataNode(String nodeName) {
-        return dataNodesByName.get(nodeName);
+        return (DataNode) dataNodesByName.get(nodeName);
     }
 
 

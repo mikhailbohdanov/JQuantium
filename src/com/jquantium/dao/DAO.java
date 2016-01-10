@@ -1,16 +1,17 @@
 package com.jquantium.dao;
 
 import com.jquantium.bean.core.node.DataNode;
+import com.jquantium.helper.DAOHelper;
 import com.jquantium.service.CORE;
 import com.jquantium.service.Nodes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -18,7 +19,75 @@ import java.util.List;
  */
 @Service
 public class DAO {
+
+    // - create
+    public int insertRow(String sql, MapSqlParameterSource map, NamedParameterJdbcTemplate jdbc) throws Exception {
+        if (sql == null || sql.isEmpty() || map == null || jdbc == null) {
+            throw new Exception();//TODO make normal intercept exception
+        }
+
+        KeyHolder key = new GeneratedKeyHolder();
+
+        try {
+            jdbc.update(sql, map, key);
+        } catch (Exception e) {
+            throw e;
+        }
+
+        return key.getKey().intValue();
+    }
+
+    // - read
+    public <E> E readRow(String sql, MapSqlParameterSource map, NamedParameterJdbcTemplate jdbc, Class<E> eClass) throws Exception {
+        if (sql == null || sql.isEmpty() || jdbc == null || eClass == null) {
+            throw new Exception();//TODO make normal intercept exception
+        }
+
+        if (map == null) {
+            map = new MapSqlParameterSource();
+        }
+
+        return jdbc.queryForObject(sql, map, DAOHelper.getMapper(eClass));
+    }
+
+    public <E> List<E> readRows(String sql, MapSqlParameterSource map, NamedParameterJdbcTemplate jdbc, Class<E> eClass) throws Exception {
+        if (sql == null || sql.isEmpty() || jdbc == null || eClass == null) {
+            throw new Exception();//TODO make normal intercept exception
+        }
+
+        if (map == null) {
+            map = new MapSqlParameterSource();
+        }
+
+        return jdbc.query(sql, map, DAOHelper.getMapper(eClass));
+    }
+
+    // - update
+
+    // - delete
+
+
+
+    public <E> List<E> getRowList(String sql, MapSqlParameterSource map, RowMapper<E> mapper) throws Exception {
+        return getRowList(sql, map, mapper, jdbc);
+    }
+    public <E> List<E> getRowList(String sql, MapSqlParameterSource map, RowMapper<E> mapper, NamedParameterJdbcTemplate jdbc) throws Exception {
+        if (jdbc == null) {
+            throw new Exception();
+        }
+
+        return jdbc.query(sql, map, mapper);
+    }
+
+
+
     private DataNode mainNode;
+    private NamedParameterJdbcTemplate jdbc;
+
+    public void setMainNode(DataNode node) {
+        this.mainNode = node;
+        this.jdbc = node.getJdbc();
+    }
 
     private DataNode getNode(String nodeName) {
         return CORE.nodes.getDataNode(nodeName);

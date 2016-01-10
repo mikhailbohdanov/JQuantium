@@ -36,6 +36,10 @@ public class DataNode extends Node {
     }
 
     public boolean init() {
+        if (jdbc != null) {
+            return true;
+        }
+
         MysqlDataSource dataSource = new MysqlDataSource();
 
         dataSource.setUrl(super.url);
