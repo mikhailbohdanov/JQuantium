@@ -40,7 +40,7 @@ public class Nodes {
                     .addValue("url", node.getUrl());
 
             try {
-                dao.putRow("INSERT INTO `core_nodes` (`name`, `type`, `url`) VALUES (:name, :type, :url)", map);
+                dao.insertRow("INSERT INTO `core_nodes` (`name`, `type`, `url`) VALUES (:name, :type, :url)", map);
             } catch (Exception e) {
                 return false;
             }
@@ -59,7 +59,7 @@ public class Nodes {
                     .addValue("url", node.getUrl());
 
             try {
-                dao.putRow("UPDATE `core_nodes` SET `name` = :name, `type` = :type, `url` = :url WHERE `nodeId` = :nodeId", map);
+                dao.exec("UPDATE `core_nodes` SET `name` = :name, `type` = :type, `url` = :url WHERE `nodeId` = :nodeId", map);
             } catch (Exception e) {
                 return false;
             }
@@ -74,7 +74,7 @@ public class Nodes {
             map.addValue("nodeId", node.getNodeId());
 
             try {
-                dao.putRow("DELETE FROM `core_nodes` WHERE `nodeId` = :nodeId", map);
+                dao.exec("DELETE FROM `core_nodes` WHERE `nodeId` = :nodeId", map);
             } catch (Exception e) {
                 return false;
             }
@@ -96,11 +96,11 @@ public class Nodes {
         }
 
         @Override
-        protected boolean condition(Node node) {
+        protected boolean filter(Node node) {
             switch (node.getType()) {
                 case DATA_BASE:
-                    ((DataNode) node).init();
-                    return true;
+//                    ((DataNode) node).init();//TODO fixme ClassCastException
+//                    return true;
                 default:
                     return false;
             }
@@ -113,11 +113,17 @@ public class Nodes {
         dataNode.init(dataSource);
 
         nodeList.add(dataNode);
-        dao.setMainNode(dataNode);
+        dao.setMasterNode(dataNode);
 
         try {
-            nodeList.addAll(dao.readRows("SELECT * FROM `core_nodes`", null, dataNode.getJdbc(), Node.class));
-        } catch (Exception e) {}
+            nodeList.addAll(dao.selectRows("SELECT * FROM `core_nodes`", null, Node.class));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Node getNode() {
+        return nodeById.get(0);
     }
 
     public Node getNode(int nodeId) {

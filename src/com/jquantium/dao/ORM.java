@@ -9,9 +9,9 @@ import java.util.List;
 /**
  * Created by Mykhailo_Bohdanov on 26/08/2015.
  */
-//@Repository
+@Repository
 public class ORM {
-//    @Autowired
+    @Autowired
     private DAO dao;
 
     public int insert(Object object) throws Exception {
@@ -59,7 +59,7 @@ public class ORM {
     }
     public <E> List<E> selectList(Class<E> eClass, int nodeId) throws Exception {
         if (eClass == Node.class) {
-            return dao.getRowList("SELECT * FROM `core_nodes`", null, eClass);
+            return dao.selectRows("SELECT * FROM `core_nodes`", null, eClass);
         } else {
             return null;
         }

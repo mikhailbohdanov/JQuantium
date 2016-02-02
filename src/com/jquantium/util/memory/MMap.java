@@ -31,7 +31,7 @@ public abstract class MMap<K, E> implements GeneratedKey<K, E> {
         return key;
     }
 
-    protected boolean condition(E element) {
+    protected boolean filter(E element) {
         return true;
     }
 
@@ -54,7 +54,7 @@ public abstract class MMap<K, E> implements GeneratedKey<K, E> {
         return addElement((E) element);
     }
     protected boolean addElement(E element) {
-        if (!condition(element)) {
+        if (!filter(element)) {
             return false;
         }
 

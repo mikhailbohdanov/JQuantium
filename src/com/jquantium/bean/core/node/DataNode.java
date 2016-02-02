@@ -14,8 +14,10 @@ public class DataNode extends Node {
 
     private DataSource dataSource;
     private NamedParameterJdbcTemplate jdbc;
-    private boolean inited;
 
+    public DataNode() {
+        super();
+    }
     public DataNode(String name, NodeType type, String url) {
         super(name, type, url);
     }
@@ -32,22 +34,26 @@ public class DataNode extends Node {
     }
 
     public boolean isInited() {
-        return inited;
+        return jdbc != null;
     }
 
     public boolean init() {
-        if (jdbc != null) {
+        if (isInited()) {
             return true;
         }
 
         MysqlDataSource dataSource = new MysqlDataSource();
 
+        this.url = new Url(super.url);
+
         dataSource.setUrl(super.url);
+        dataSource.setUser(url.getUserName());
+        dataSource.setPassword(url.getPassword());
 
         return init(dataSource);
     }
     public boolean init(DataSource dataSource) {
-        if (jdbc != null) {
+        if (isInited()) {
             return true;
         }
 
@@ -55,11 +61,9 @@ public class DataNode extends Node {
 
         try {
             jdbc = new NamedParameterJdbcTemplate(dataSource);
-        } catch (Exception e) {
+        } catch (Exception e) {//TODO exception
             return false;
         }
-
-        this.inited = true;
 
         return true;
     }

@@ -60,6 +60,7 @@ public class Context {
     }
     public Context setUrl(Url url) {
         this.url = url;
+
         return this;
     }
 
@@ -67,11 +68,11 @@ public class Context {
         return language;
     }
     public String getWord(String key) {
-        if (language != null) {
-            return language.getWord(key);
+        if (language == null) {
+            return null;
         }
 
-        return null;
+        return language.getWord(key);
     }
 
     public boolean setLanguage() {
@@ -124,6 +125,7 @@ public class Context {
     }
     public Context setUser(UserSecurity user) {
         this.user = user;
+
         return this;
     }
 

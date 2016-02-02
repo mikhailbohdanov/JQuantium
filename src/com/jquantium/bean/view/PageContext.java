@@ -28,16 +28,18 @@ public class PageContext extends Context {
     public PageContext(HttpServletRequest request, HttpServletResponse response, Model model) {
         super(request, response);
 
-        this.model = model;
+        setModel(model);
     }
 
     public Model getModel() {
         return model;
     }
-    private void setModel(Model model) {
+    private PageContext setModel(Model model) {
         this.model = model;
 
         model.addAttribute("PC", this);
+
+        return this;
     }
 
     public PageContext setView(String module, String action) {
@@ -70,6 +72,7 @@ public class PageContext extends Context {
     }
     public PageContext setPage(Page page) {
         this.page = page;
+
         return this;
     }
 
@@ -78,6 +81,7 @@ public class PageContext extends Context {
     }
     public PageContext setPageView(PageView pageView) {
         this.pageView = pageView;
+
         return this;
     }
 
