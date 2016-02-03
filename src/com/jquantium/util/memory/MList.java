@@ -1,7 +1,5 @@
 package com.jquantium.util.memory;
 
-import com.jquantium.service.CORE;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

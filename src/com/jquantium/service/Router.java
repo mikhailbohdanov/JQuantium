@@ -1,43 +1,66 @@
 package com.jquantium.service;
 
 import com.jquantium.bean.core.Route;
-import com.jquantium.util.auto.AutoHashMap;
-import com.jquantium.util.auto.AutoList;
-import com.jquantium.util.auto.AutoTreeMap;
-import com.jquantium.util.error.PageNotFoundException;
+import com.jquantium.util.error.RouteNotFoundException;
+import com.jquantium.util.memory.MHashMap;
+import com.jquantium.util.memory.MList;
+import com.jquantium.util.memory.MTreeMap;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by Mykhailo_Bohdanov on 08/07/2015.
  */
 @Service
 public class Router {
-    private AutoList<Route> routes = new AutoList<>();
-    private AutoHashMap<Integer, Route> routesById = new AutoHashMap<Integer, Route>(routes) {
+    private MList<Route> routeList = new MList<Route>() {
+        @Override
+        protected List<Route> init() {
+            return null;
+        }
+
+        @Override
+        protected boolean createElement(Route element) {
+            return false;
+        }
+
+        @Override
+        protected boolean updateElement(Route element) {
+            return false;
+        }
+
+        @Override
+        protected boolean removeElement(Route element) {
+            return false;
+        }
+    };
+
+    private MHashMap<Integer, Route> routesById = new MHashMap<Integer, Route>(routeList) {
         @Override
         public Integer getKey(Route route) {
             return route.getRouteId();
         }
     };
-    private AutoTreeMap<String, Route> routesByUrl = new AutoTreeMap<String, Route>(routes) {
+
+    private MTreeMap<String, Route> routesByUrl = new MTreeMap<String, Route>(routeList) {
         @Override
         public String getKey(Route route) {
             return route.getUrl();
         }
     };
 
-
-    public Route getRoute(int routeId) throws PageNotFoundException {
+    public Route getRoute(int routeId) throws RouteNotFoundException {
         if (routeId <= 0) {
-            throw new PageNotFoundException();
+            throw new RouteNotFoundException();
         }
 
         return routesById.get(routeId);
     }
 
-    public Route getRoute(String url) throws PageNotFoundException {
+    public Route getRoute(String url) throws RouteNotFoundException {
         if (url == null || url.isEmpty()) {
-            throw new PageNotFoundException();
+            throw new RouteNotFoundException();
         }
 
         return routesByUrl.get(url);

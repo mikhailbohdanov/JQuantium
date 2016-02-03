@@ -8,6 +8,7 @@ import com.jquantium.bean.view.page.PageView;
 import com.jquantium.helper.ContextHelper;
 import com.jquantium.service.CORE;
 import com.jquantium.util.error.PageNotFoundException;
+import com.jquantium.util.error.RouteNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +23,14 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class Pages {
 
-//    @RequestMapping(value = "/**", method = RequestMethod.GET)
+    @RequestMapping(value = "/**", method = RequestMethod.GET)
     public String getPage(HttpServletRequest request, HttpServletResponse response, Model model) {
         PageContext PC = ContextHelper.newPageContext(request, response, model);
 
         Url url             = PC.getUrl();
         String currentUrl   = url.getPath();
         Page page           = null;
-        Route route         = null;
+        Route route;
 
         try {
             page            = CORE.view.getPage(currentUrl);
@@ -55,7 +56,9 @@ public class Pages {
                             break;
                     }
                 }
-            } catch (PageNotFoundException e) {}
+            } catch (RouteNotFoundException e) {
+            } catch (PageNotFoundException e) {
+            }
         }
 
         if (page != null) {

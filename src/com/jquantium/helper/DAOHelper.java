@@ -85,7 +85,7 @@ public class DAOHelper {
     }
 
 
-    public static <E> RowMapper<E> getMapper(Class<E> eClass) {
+    public static <E> RowMapper<E> getMapper(final Class<E> eClass) {
         if (!mappers.containsKey(eClass)) {
             mappers.put(eClass, new RowMapper<E>() {
                 @Override
