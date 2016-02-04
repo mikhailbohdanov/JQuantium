@@ -2,13 +2,16 @@ package com.jquantium.controller;
 
 import com.jquantium.bean.Url;
 import com.jquantium.bean.core.Route;
+import com.jquantium.bean.view.NativePageContext;
 import com.jquantium.bean.view.PageContext;
 import com.jquantium.bean.view.page.Page;
 import com.jquantium.bean.view.page.PageView;
 import com.jquantium.helper.ContextHelper;
 import com.jquantium.service.CORE;
+import com.jquantium.util.Assert;
 import com.jquantium.util.error.PageNotFoundException;
 import com.jquantium.util.error.RouteNotFoundException;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +20,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.jquantium.util.Assert.isNull;
+
 /**
  * Created by Mykhailo_Bohdanov on 26/06/2015.
  */
 @Controller
 public class Pages {
+
+    @RequestMapping(value = "/**", method = RequestMethod.POST)
+    public JSONObject getPageJSON(HttpServletRequest request, HttpServletResponse response) {
+        NativePageContext context = ContextHelper.newNativePageContext(request, response);
+
+        return null;
+    }
 
     @RequestMapping(value = "/**", method = RequestMethod.GET)
     public String getPage(HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -40,7 +52,7 @@ public class Pages {
             try {
                 route       = CORE.router.getRoute(currentUrl.replaceAll("^/", ""));
 
-                if (route != null) {
+                if (!isNull(route)) {
                     switch (route.getType()) {
                         case PAGE:
                             page = CORE.view.getPage(route.getOwnerId());
@@ -59,7 +71,7 @@ public class Pages {
             } catch (RouteNotFoundException | PageNotFoundException e) {}
         }
 
-        if (page != null) {
+        if (!isNull(page)) {
             PC.setPage(page);
 
             if (checkPageAccess(PC)) {
@@ -79,6 +91,10 @@ public class Pages {
 
         return PC.setView("render", "page").fetch();
     }
+
+
+
+
 
     public boolean checkPageAccess(PageContext PC) {
         return true;

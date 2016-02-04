@@ -2,11 +2,15 @@ package com.jquantium.helper;
 
 import com.jquantium.bean.Url;
 import com.jquantium.bean.core.Context;
+import com.jquantium.bean.view.NativePageContext;
 import com.jquantium.bean.view.PageContext;
+import com.jquantium.util.Assert;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.jquantium.util.Assert.isNull;
 
 /**
  * Created by Mykhailo_Bohdanov on 03/07/2015.
@@ -31,13 +35,17 @@ public class ContextHelper {
 
         PC.setLanguage();
 
-        if (url == null) {
+        if (isNull(url)) {
             PC.setUrl(new Url(request));
         } else {
             PC.setUrl(url);
         }
 
         return PC;
+    }
+
+    public static NativePageContext newNativePageContext(HttpServletRequest request, HttpServletResponse response) {
+        return new NativePageContext(request, response);
     }
 
     public static boolean hasAjax(HttpServletRequest request) {

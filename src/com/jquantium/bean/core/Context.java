@@ -5,10 +5,12 @@ import com.jquantium.bean.localization.Language;
 import com.jquantium.bean.security.UserSecurity;
 import com.jquantium.helper.UserHelper;
 import com.jquantium.service.CORE;
-import com.jquantium.service.Localization;
+import com.jquantium.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static com.jquantium.util.Assert.isNull;
 
 /**
  * Created by Mykhailo_Bohdanov on 03/07/2015.
@@ -68,7 +70,7 @@ public class Context {
         return language;
     }
     public String getWord(String key) {
-        if (language == null) {
+        if (language == null || isNull(key)) {
             return null;
         }
 
@@ -80,10 +82,18 @@ public class Context {
         Object attr;
 
         if (request != null) {
-            if ((code = request.getParameter("language")) == null || !CORE.localization.hasLanguage(code)) {
-                if (user == null || (code = user.getLanguageCode()) == null || !CORE.localization.hasLanguage(code)) {
-                    if (request.getSession() == null || (attr = request.getSession().getAttribute("language")) == null || "null".equals(code = String.valueOf(attr)) || CORE.localization.hasLanguage(code)) {
-                        if (request.getLocale() == null || (code = request.getLocale().getLanguage()) == null || CORE.localization.hasLanguage(code)) {
+            if (isNull(code = request.getParameter("language")) ||
+                    !CORE.localization.hasLanguage(code)) {
+                if (isNull(user) ||
+                        (code = user.getLanguageCode()) == null ||
+                        !CORE.localization.hasLanguage(code)) {
+                    if (request.getSession() == null ||
+                            (attr = request.getSession().getAttribute("language")) == null ||
+                            "null".equals(code = String.valueOf(attr)) ||
+                            CORE.localization.hasLanguage(code)) {
+                        if (request.getLocale() == null ||
+                                (code = request.getLocale().getLanguage()) == null ||
+                                CORE.localization.hasLanguage(code)) {
                             code = null;
                         }
                     }
