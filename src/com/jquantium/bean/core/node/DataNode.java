@@ -18,10 +18,10 @@ public class DataNode extends Node {
     public DataNode() {
         super();
     }
-    public DataNode(String name, NodeType type, String url) {
+    public DataNode(String name, Type type, String url) {
         super(name, type, url);
     }
-    public DataNode(int nodeId, String name, NodeType type, String url) {
+    public DataNode(int nodeId, String name, Type type, String url) {
         super(nodeId, name, type, url);
     }
 

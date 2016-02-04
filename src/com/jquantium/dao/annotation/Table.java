@@ -14,4 +14,6 @@ public @interface Table {
 
     String name() default "";
 
+    boolean template() default false;
+
 }

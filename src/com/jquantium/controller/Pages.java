@@ -56,9 +56,7 @@ public class Pages {
                             break;
                     }
                 }
-            } catch (RouteNotFoundException e) {
-            } catch (PageNotFoundException e) {
-            }
+            } catch (RouteNotFoundException | PageNotFoundException e) {}
         }
 
         if (page != null) {

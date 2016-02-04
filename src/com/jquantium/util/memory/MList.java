@@ -59,7 +59,9 @@ public abstract class MList<E> {
         return true;
     }
     public void addAll(List<E> elements) {
-        elements.forEach(this::add);
+        if (elements != null) {
+            elements.forEach(this::add);
+        }
     }
 
     public E get(int index) {

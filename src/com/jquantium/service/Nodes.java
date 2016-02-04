@@ -2,9 +2,7 @@ package com.jquantium.service;
 
 import com.jquantium.bean.core.node.DataNode;
 import com.jquantium.bean.core.node.Node;
-import com.jquantium.bean.core.node.NodeType;
 import com.jquantium.dao.DAO;
-import com.jquantium.helper.DAOHelper;
 import com.jquantium.util.memory.MHashMap;
 import com.jquantium.util.memory.MList;
 import com.jquantium.util.memory.MTreeMap;
@@ -109,7 +107,7 @@ public class Nodes {
 
     @Autowired
     public void init(@Qualifier("main") DataSource dataSource) {
-        DataNode dataNode = new DataNode("main", NodeType.DATA_BASE, "");
+        DataNode dataNode = new DataNode("main", Node.Type.DATA_BASE, "");
         dataNode.init(dataSource);
 
         nodeList.add(dataNode);

@@ -1,5 +1,6 @@
 package com.jquantium.bean.view.page;
 
+import com.jquantium.dao.annotation.Column;
 import com.jquantium.dao.annotation.Table;
 
 /**
@@ -7,21 +8,28 @@ import com.jquantium.dao.annotation.Table;
  */
 @Table(name = "view_pages")
 public class Page {
-    public enum STATUS {
+    public enum Status {
         PUBLIC,
         MODIFIED,
         PRIVATE,
         DELETED
     }
 
+    @Column(primary = true, length = 10, unsigned = true, autoIncrement = true)
     private int pageId;
+
+    @Column(unique = "name", length = 128, notNull = true)
     private String name;
+
+    @Column(length = 0)
     private String url;
-    private STATUS status;
+
+    @Column
+    private Status status;
 
     public Page() {}
 
-    public Page(int pageId, String name, String url, STATUS status) {
+    public Page(int pageId, String name, String url, Status status) {
         this.pageId = pageId;
         this.name = name;
         this.url = url;
@@ -46,13 +54,13 @@ public class Page {
         this.url = url;
     }
 
-    public STATUS getStatus() {
+    public Status getStatus() {
         return status;
     }
     public void setStatus(String status) {
-        this.status = STATUS.valueOf(status);
+        this.status = Status.valueOf(status);
     }
-    public void setStatus(STATUS status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 }

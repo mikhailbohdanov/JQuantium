@@ -1,5 +1,7 @@
 package com.jquantium.bean.core;
 
+import com.jquantium.dao.annotation.Column;
+
 /**
  * Created by Mykhailo_Bohdanov on 06/07/2015.
  */
@@ -10,9 +12,16 @@ public class Route {
         GROUP
     }
 
+    @Column(primary = true, length = 10, unsigned = true, autoIncrement = true)
     private int routeId;
+
+    @Column(length = 10, notNull = true)
     private int ownerId;
+
+    @Column
     private Type type;
+
+    @Column(length = 0)
     private String url;
 
     public Route(int routeId, int ownerId, Type type, String url) {

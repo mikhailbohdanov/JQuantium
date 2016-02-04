@@ -13,6 +13,12 @@ import java.util.function.Consumer;
  */
 @Table(name = "core_nodes")
 public class Node implements Observable<Node> {
+    public enum Type {
+        DATA_BASE,
+        FILE_STORAGE,
+        MAIL_SENDER
+    }
+
     private List<Consumer> actions = new ArrayList<>();
 
     @Column(primary = true, length = 10, unsigned = true, autoIncrement = true)
@@ -22,18 +28,18 @@ public class Node implements Observable<Node> {
     protected String name;
 
     @Column
-    protected NodeType type;
+    protected Type type;
 
     @Column(length = 0)
     protected String url;
 
     public Node() {}
-    public Node(String name, NodeType type, String url) {
+    public Node(String name, Type type, String url) {
         this.name = name;
         this.type = type;
         this.url = url;
     }
-    public Node(int nodeId, String name, NodeType type, String url) {
+    public Node(int nodeId, String name, Type type, String url) {
         this.nodeId = nodeId;
         this.name = name;
         this.type = type;
@@ -48,10 +54,10 @@ public class Node implements Observable<Node> {
         return name;
     }
 
-    public NodeType getType() {
+    public Type getType() {
         return type;
     }
-    public Node setType(NodeType type) {
+    public Node setType(Type type) {
         this.type = type;
         fireEvent();
         return this;

@@ -2,7 +2,7 @@ package com.jquantium.bean.localization;
 
 import com.jquantium.dao.annotation.Column;
 import com.jquantium.dao.annotation.Table;
-import com.jquantium.util.auto.AutoList;
+import com.jquantium.util.memory.MList;
 import com.jquantium.util.observer.Observable;
 
 import java.util.ArrayList;
@@ -14,9 +14,32 @@ import java.util.function.Consumer;
  */
 @Table(name = "core_languages")
 public class Language implements Observable {
+    private class KeyList extends MList<LanguageValue> {
+
+        @Override
+        protected List<LanguageValue> init() {
+            return null;
+        }
+
+        @Override
+        protected boolean createElement(LanguageValue element) {
+            return false;
+        }
+
+        @Override
+        protected boolean updateElement(LanguageValue element) {
+            return false;
+        }
+
+        @Override
+        protected boolean removeElement(LanguageValue element) {
+            return false;
+        }
+    }
+
     private List<Consumer> actions = new ArrayList<>();
 
-    private AutoList<LanguageValue> values;
+    private KeyList valueList;
 
     @Column(primary = true, length = 10, autoIncrement = true, unsigned = true)
     private int languageId;
@@ -37,7 +60,7 @@ public class Language implements Observable {
         this.enabled = enabled;
 
         if (languageId > 0) {
-            values = new AutoList<>();
+            valueList = new KeyList();
         }
     }
 
@@ -50,7 +73,9 @@ public class Language implements Observable {
     }
     public Language setCode(String code) {
         this.code = code;
+
         fireEvent();
+
         return this;
     }
 
@@ -59,7 +84,9 @@ public class Language implements Observable {
     }
     public Language setName(String name) {
         this.name = name;
+
         fireEvent();
+
         return this;
     }
 
@@ -68,7 +95,9 @@ public class Language implements Observable {
     }
     public Language setEnabled(boolean enabled) {
         this.enabled = enabled;
+
         fireEvent();
+
         return this;
     }
 

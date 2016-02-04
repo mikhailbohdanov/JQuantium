@@ -1,13 +1,24 @@
 package com.jquantium.bean.view.page;
 
+import com.jquantium.dao.annotation.Column;
+import com.jquantium.dao.annotation.Table;
+
 /**
  * Created by Mykhailo_Bohdanov on 01/07/2015.
  */
+@Table(name = "view_pages_{language}", template = true)
 public class PageView {
+
+    @Column(primary = true, length = 10, unsigned = true)
     private int pageId;
 
+    @Column(length = 0)
     private String title;
+
+    @Column(length = 0)
     private String keyWords;
+
+    @Column(length = 0)
     private String description;
 
     public PageView() {}
