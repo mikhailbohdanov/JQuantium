@@ -10,7 +10,8 @@ import com.jquantium.util.Assert;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.jquantium.util.Assert.isNull;
+import static com.jquantium.util.Assert.EQUALS;
+import static com.jquantium.util.Assert.NULL;
 
 /**
  * Created by Mykhailo_Bohdanov on 03/07/2015.
@@ -70,7 +71,7 @@ public class Context {
         return language;
     }
     public String getWord(String key) {
-        if (language == null || isNull(key)) {
+        if (NULL(language) || NULL(key)) {
             return null;
         }
 
@@ -81,18 +82,18 @@ public class Context {
         String code = null;
         Object attr;
 
-        if (request != null) {
-            if (isNull(code = request.getParameter("language")) ||
+        if (NULL(request)) {
+            if (NULL(code = request.getParameter("language")) ||
                     !CORE.localization.hasLanguage(code)) {
-                if (isNull(user) ||
-                        (code = user.getLanguageCode()) == null ||
+                if (NULL(user) ||
+                        NULL(code = user.getLanguageCode()) ||
                         !CORE.localization.hasLanguage(code)) {
-                    if (request.getSession() == null ||
+                    if (NULL(request.getSession()) ||
                             (attr = request.getSession().getAttribute("language")) == null ||
-                            "null".equals(code = String.valueOf(attr)) ||
+                            EQUALS(code = String.valueOf(attr), "null") ||
                             CORE.localization.hasLanguage(code)) {
-                        if (request.getLocale() == null ||
-                                (code = request.getLocale().getLanguage()) == null ||
+                        if (NULL(request.getLocale()) ||
+                                NULL(code = request.getLocale().getLanguage()) ||
                                 CORE.localization.hasLanguage(code)) {
                             code = null;
                         }
@@ -101,13 +102,13 @@ public class Context {
             }
         }
 
-        if (code == null || (language = CORE.localization.getLanguage(code)) == null || !language.isEnabled()) {
+        if (NULL(code) || NULL(language = CORE.localization.getLanguage(code)) || !language.isEnabled()) {
             code = CORE.config.getString("CORE", "defaultLanguage");//TODO
         }
 
         language    = CORE.localization.getLanguage(code);
 
-        if (language == null) {
+        if (NULL(language)) {
             return false;
         }
 

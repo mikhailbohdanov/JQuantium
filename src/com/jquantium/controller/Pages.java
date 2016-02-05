@@ -8,7 +8,6 @@ import com.jquantium.bean.view.page.Page;
 import com.jquantium.bean.view.page.PageView;
 import com.jquantium.helper.ContextHelper;
 import com.jquantium.service.CORE;
-import com.jquantium.util.Assert;
 import com.jquantium.util.error.PageNotFoundException;
 import com.jquantium.util.error.RouteNotFoundException;
 import org.json.simple.JSONObject;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.jquantium.util.Assert.isNull;
+import static com.jquantium.util.Assert.Null;
 
 /**
  * Created by Mykhailo_Bohdanov on 26/06/2015.
@@ -52,7 +51,7 @@ public class Pages {
             try {
                 route       = CORE.router.getRoute(currentUrl.replaceAll("^/", ""));
 
-                if (!isNull(route)) {
+                if (!Null(route)) {
                     switch (route.getType()) {
                         case PAGE:
                             page = CORE.view.getPage(route.getOwnerId());
@@ -71,7 +70,7 @@ public class Pages {
             } catch (RouteNotFoundException | PageNotFoundException e) {}
         }
 
-        if (!isNull(page)) {
+        if (!Null(page)) {
             PC.setPage(page);
 
             if (checkPageAccess(PC)) {

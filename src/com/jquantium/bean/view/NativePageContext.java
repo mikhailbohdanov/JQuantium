@@ -3,12 +3,11 @@ package com.jquantium.bean.view;
 import com.jquantium.bean.core.Context;
 import com.jquantium.bean.view.page.Page;
 import com.jquantium.bean.view.page.PageView;
-import com.jquantium.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.jquantium.util.Assert.isNull;
+import static com.jquantium.util.Assert.Null;
 
 /**
  * Created by Mykhailo_Bohdanov on 01/07/2015.
@@ -63,7 +62,7 @@ public class NativePageContext extends Context {
         return pageView.getTitle();
     }
     public String getKeywords() {
-        if (isNull(pageView)) {
+        if (Null(pageView)) {
             return null;
         }
 
