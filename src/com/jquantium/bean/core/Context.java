@@ -10,6 +10,7 @@ import com.jquantium.util.Assert;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.jquantium.util.Assert.EMPTY;
 import static com.jquantium.util.Assert.EQUALS;
 import static com.jquantium.util.Assert.NULL;
 
@@ -71,7 +72,7 @@ public class Context {
         return language;
     }
     public String getWord(String key) {
-        if (NULL(language) || NULL(key)) {
+        if (NULL(language) || EMPTY(key)) {
             return null;
         }
 
@@ -82,18 +83,18 @@ public class Context {
         String code = null;
         Object attr;
 
-        if (NULL(request)) {
-            if (NULL(code = request.getParameter("language")) ||
+        if (!NULL(request)) {
+            if (EMPTY(code = request.getParameter("language")) ||
                     !CORE.localization.hasLanguage(code)) {
                 if (NULL(user) ||
-                        NULL(code = user.getLanguageCode()) ||
+                        EMPTY(code = user.getLanguageCode()) ||
                         !CORE.localization.hasLanguage(code)) {
                     if (NULL(request.getSession()) ||
-                            (attr = request.getSession().getAttribute("language")) == null ||
+                            NULL(attr = request.getSession().getAttribute("language")) ||
                             EQUALS(code = String.valueOf(attr), "null") ||
                             CORE.localization.hasLanguage(code)) {
                         if (NULL(request.getLocale()) ||
-                                NULL(code = request.getLocale().getLanguage()) ||
+                                EMPTY(code = request.getLocale().getLanguage()) ||
                                 CORE.localization.hasLanguage(code)) {
                             code = null;
                         }
@@ -102,7 +103,9 @@ public class Context {
             }
         }
 
-        if (NULL(code) || NULL(language = CORE.localization.getLanguage(code)) || !language.isEnabled()) {
+        if (EMPTY(code) ||
+                NULL(language = CORE.localization.getLanguage(code)) ||
+                !language.isEnabled()) {
             code = CORE.config.getString("CORE", "defaultLanguage");//TODO
         }
 
@@ -119,11 +122,11 @@ public class Context {
             return false;
         }
 
-        if (request.getSession() != null) {
+        if (!NULL(request.getSession())) {
             request.getSession().setAttribute("language", code);
         }
 
-        if (user != null) {
+        if (!NULL(user)) {
             user.setLanguageCode(code);
 //TODO            MainServices.securityService.updateSecurityUser(user);
         }

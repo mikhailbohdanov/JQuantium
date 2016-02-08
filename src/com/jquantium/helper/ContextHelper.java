@@ -9,7 +9,8 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.jquantium.util.Assert.Null;
+import static com.jquantium.util.Assert.EQUALS;
+import static com.jquantium.util.Assert.NULL;
 
 /**
  * Created by Mykhailo_Bohdanov on 03/07/2015.
@@ -34,7 +35,7 @@ public class ContextHelper {
 
         PC.setLanguage();
 
-        if (Null(url)) {
+        if (NULL(url)) {
             PC.setUrl(new Url(request));
         } else {
             PC.setUrl(url);
@@ -52,23 +53,23 @@ public class ContextHelper {
         boolean ajax = false;
 
         try {
-            if ((param = request.getHeader("X-REQUESTED-WITH")) != null && "XMLHttpRequest".equals(param)) {
+            if (!NULL(param = request.getHeader("X-REQUESTED-WITH")) && EQUALS("XMLHttpRequest", param)) {
                 ajax = true;
             }
         } catch (Exception e){}
 
         if (!ajax) {
             try {
-                if ((param = request.getHeader("HTTP-X-REQUESTED-WITH")) != null && "XMLHttpRequest".equals(param)) {
+                if (!NULL(param = request.getHeader("HTTP-X-REQUESTED-WITH")) && EQUALS("XMLHttpRequest", param)) {
                     ajax = true;
                 }
             } catch (Exception e) {}
 
-            if (!ajax || (param = request.getParameter("_ajax")) != null) {
+            if (!ajax || !NULL(param = request.getParameter("_ajax"))) {
                 try {
-                    if ("true".equals(param)) {
+                    if (EQUALS("true", param)) {
                         ajax = true;
-                    } else if ("false".equals(param)) {
+                    } else if (EQUALS("false", param)) {
                         ajax = false;
                     }
                 } catch (Exception e) {}

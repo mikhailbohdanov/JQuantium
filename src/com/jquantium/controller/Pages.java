@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.jquantium.util.Assert.Null;
+import static com.jquantium.util.Assert.NULL;
 
 /**
  * Created by Mykhailo_Bohdanov on 26/06/2015.
@@ -47,11 +47,11 @@ public class Pages {
             page            = CORE.view.getPage(currentUrl);
         } catch (PageNotFoundException e) {}
 
-        if (page == null) {
+        if (NULL(page)) {
             try {
                 route       = CORE.router.getRoute(currentUrl.replaceAll("^/", ""));
 
-                if (!Null(route)) {
+                if (!NULL(route)) {
                     switch (route.getType()) {
                         case PAGE:
                             page = CORE.view.getPage(route.getOwnerId());
@@ -70,13 +70,13 @@ public class Pages {
             } catch (RouteNotFoundException | PageNotFoundException e) {}
         }
 
-        if (!Null(page)) {
+        if (!NULL(page)) {
             PC.setPage(page);
 
             if (checkPageAccess(PC)) {
                 PageView pageView = getPageView(PC);
 
-                if (pageView != null) {
+                if (!NULL(pageView)) {
                     //TODO here build page by Page
                 } else {
                     //TODO some trouble

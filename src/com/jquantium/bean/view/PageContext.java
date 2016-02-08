@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.jquantium.util.Assert.NULL;
+
 /**
  * Created by Mykhailo_Bohdanov on 01/07/2015.
  */
@@ -98,21 +100,21 @@ public class PageContext extends Context {
     }
 
     public String getTitle() {
-        if (pageView == null) {
+        if (NULL(pageView)) {
             return null;
         }
 
         return pageView.getTitle();
     }
     public String getKeywords() {
-        if (pageView == null) {
+        if (NULL(pageView)) {
             return null;
         }
 
         return pageView.getKeyWords();
     }
     public String getDescription() {
-        if (pageView == null) {
+        if (NULL(pageView)) {
             return null;
         }
 
