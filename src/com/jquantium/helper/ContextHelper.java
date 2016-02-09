@@ -4,6 +4,7 @@ import com.jquantium.bean.Url;
 import com.jquantium.bean.core.Context;
 import com.jquantium.bean.view.NativePageContext;
 import com.jquantium.bean.view.PageContext;
+import com.jquantium.bean.view.ViewContext;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,33 +17,45 @@ import static com.jquantium.util.Assert.NULL;
  * Created by Mykhailo_Bohdanov on 03/07/2015.
  */
 public class ContextHelper {
+    public static void initContext(Context context, HttpServletRequest request, HttpServletResponse response, Url url) {
+        context.setLanguage();
+
+        if (NULL(url)) {
+            context.setUrl(new Url(request));
+        } else {
+            context.setUrl(url);
+        }
+    }
 
     public static Context newContext(HttpServletRequest request, HttpServletResponse response) {
         return new Context(request, response);
     }
 
-    public static PageContext newPageContext(HttpServletRequest request, Model model) {
-        return newPageContext(request, null, model, null);
+    public static PageContext newPageContext(HttpServletRequest request) {
+        return newPageContext(request, null, null);
     }
-    public static PageContext newPageContext(HttpServletRequest request, Model model, Url url) {
-        return newPageContext(request, null, model, url);
+    public static PageContext newPageContext(HttpServletRequest request, Url url) {
+        return newPageContext(request, null, url);
     }
-    public static PageContext newPageContext(HttpServletRequest request, HttpServletResponse response, Model model) {
-        return newPageContext(request, response, model, null);
+    public static PageContext newPageContext(HttpServletRequest request, HttpServletResponse response) {
+        return newPageContext(request, response, null);
     }
-    public static PageContext newPageContext(HttpServletRequest request, HttpServletResponse response, Model model, Url url) {
-        PageContext PC  = new PageContext(request, response, model);
+    public static PageContext newPageContext(HttpServletRequest request, HttpServletResponse response, Url url) {
+        PageContext PC = new PageContext(request, response);
 
-        PC.setLanguage();
-
-        if (NULL(url)) {
-            PC.setUrl(new Url(request));
-        } else {
-            PC.setUrl(url);
-        }
+        initContext(PC, request, response, url);
 
         return PC;
     }
+
+    public static ViewContext newViewContext(HttpServletRequest request, HttpServletResponse response, Model model, Url url) {
+        ViewContext VC = new ViewContext(request, response, model);
+
+        initContext(VC, request, response, url);
+
+        return VC;
+    }
+
 
     public static NativePageContext newNativePageContext(HttpServletRequest request, HttpServletResponse response) {
         return new NativePageContext(request, response);
@@ -56,14 +69,16 @@ public class ContextHelper {
             if (!NULL(param = request.getHeader("X-REQUESTED-WITH")) && EQUALS("XMLHttpRequest", param)) {
                 ajax = true;
             }
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
 
         if (!ajax) {
             try {
                 if (!NULL(param = request.getHeader("HTTP-X-REQUESTED-WITH")) && EQUALS("XMLHttpRequest", param)) {
                     ajax = true;
                 }
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
 
             if (!ajax || !NULL(param = request.getParameter("_ajax"))) {
                 try {
@@ -72,7 +87,8 @@ public class ContextHelper {
                     } else if (EQUALS("false", param)) {
                         ajax = false;
                     }
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
         }
 

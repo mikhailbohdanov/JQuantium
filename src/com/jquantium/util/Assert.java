@@ -17,20 +17,4 @@ public abstract class Assert /*extends org.springframework.util.Assert*/ {
         return !NULL(stringA) && !NULL(stringB) && stringA.equals(stringB);
     }
 
-
-//    public static boolean Null(Object object) {
-//        return object == null;
-//    }
-//
-//
-//
-//
-//    public static boolean Null(String string) {
-//        return isEmpty(string) || "null".equals(string);
-//    }
-//
-//    public static boolean isEmpty(String string) {
-//        return Null(string) || string.isEmpty();
-//    }
-
 }

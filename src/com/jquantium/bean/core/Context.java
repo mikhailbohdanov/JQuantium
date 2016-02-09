@@ -26,8 +26,8 @@ public class Context {
 
     protected UserSecurity user;
 
-    private long START_MILLIS       = System.currentTimeMillis();
-    private long START_NANO         = System.nanoTime();
+    private long START_MILLIS = System.currentTimeMillis();
+    private long START_NANO = System.nanoTime();
 
     protected Context() {
         this.user = UserHelper.getMe();
@@ -45,9 +45,11 @@ public class Context {
     public long getDurationMillis() {
         return System.currentTimeMillis() - START_MILLIS;
     }
+
     public long getDurationNano() {
         return System.nanoTime() - START_NANO;
     }
+
     public long getDuration() {
         return Long.parseLong(String.valueOf(getDurationMillis()) + String.valueOf(getDurationNano()));
     }
@@ -55,6 +57,7 @@ public class Context {
     public HttpServletRequest getRequest() {
         return request;
     }
+
     public HttpServletResponse getResponse() {
         return response;
     }
@@ -62,8 +65,15 @@ public class Context {
     public Url getUrl() {
         return url;
     }
+
     public Context setUrl(Url url) {
         this.url = url;
+
+        return this;
+    }
+
+    public Context setUrl(String url) {
+        this.url = new Url(url);
 
         return this;
     }
@@ -71,6 +81,7 @@ public class Context {
     public Language getLanguage() {
         return language;
     }
+
     public String getWord(String key) {
         if (NULL(language) || EMPTY(key)) {
             return null;
@@ -109,7 +120,7 @@ public class Context {
             code = CORE.config.getString("CORE", "defaultLanguage");//TODO
         }
 
-        language    = CORE.localization.getLanguage(code);
+        language = CORE.localization.getLanguage(code);
 
         if (NULL(language)) {
             return false;
@@ -117,6 +128,7 @@ public class Context {
 
         return true;
     }
+
     public boolean setLanguage(String code) {
         if (!CORE.localization.hasLanguage(code)) {
             return false;
@@ -137,6 +149,7 @@ public class Context {
     public UserSecurity getUser() {
         return user;
     }
+
     public Context setUser(UserSecurity user) {
         this.user = user;
 

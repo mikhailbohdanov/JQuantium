@@ -38,18 +38,19 @@ public class Pages {
     public String getPage(HttpServletRequest request, HttpServletResponse response, Model model) {
         PageContext PC = ContextHelper.newPageContext(request, response, model);
 
-        Url url             = PC.getUrl();
-        String currentUrl   = url.getPath();
-        Page page           = null;
+        Url url = PC.getUrl();
+        String currentUrl = url.getPath();
+        Page page = null;
         Route route;
 
         try {
-            page            = CORE.view.getPage(currentUrl);
-        } catch (PageNotFoundException e) {}
+            page = CORE.view.getPage(currentUrl);
+        } catch (PageNotFoundException e) {
+        }
 
         if (NULL(page)) {
             try {
-                route       = CORE.router.getRoute(currentUrl.replaceAll("^/", ""));
+                route = CORE.router.getRoute(currentUrl.replaceAll("^/", ""));
 
                 if (!NULL(route)) {
                     switch (route.getType()) {
@@ -67,7 +68,8 @@ public class Pages {
                             break;
                     }
                 }
-            } catch (RouteNotFoundException | PageNotFoundException e) {}
+            } catch (RouteNotFoundException | PageNotFoundException e) {
+            }
         }
 
         if (!NULL(page)) {
@@ -92,9 +94,6 @@ public class Pages {
     }
 
 
-
-
-
     public boolean checkPageAccess(PageContext PC) {
         return true;
     }
@@ -102,7 +101,6 @@ public class Pages {
     public PageView getPageView(PageContext PC) {
         return null;
     }
-
 
 
 }
