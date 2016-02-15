@@ -17,17 +17,15 @@ public class ViewContext extends PageContext {
         super();
     }
 
-    public ViewContext(HttpServletRequest request, HttpServletResponse response, Model model) {
+    public ViewContext(HttpServletRequest request, HttpServletResponse response) {
         super(request, response);
-
-        setModel(model);
     }
 
     public Model getModel() {
         return model;
     }
 
-    private PageContext setModel(Model model) {
+    public ViewContext setModel(Model model) {
         this.model = model;
 
         model.addAttribute("CONTEXT", this);
@@ -35,7 +33,7 @@ public class ViewContext extends PageContext {
         return this;
     }
 
-    public PageContext setView(String module, String action) {
+    public ViewContext setView(String module, String action) {
         this.module = module;
         this.action = action;
 
@@ -46,7 +44,7 @@ public class ViewContext extends PageContext {
         return module;
     }
 
-    public PageContext setModule(String module) {
+    public ViewContext setModule(String module) {
         this.module = module;
 
         return this;
@@ -56,11 +54,13 @@ public class ViewContext extends PageContext {
         return action;
     }
 
-    public PageContext setAction(String action) {
+    public ViewContext setAction(String action) {
         this.action = action;
 
         return this;
     }
 
-
+    public String fetch() {
+        return "";
+    }
 }

@@ -1,10 +1,13 @@
 package com.jquantium.service;
 
 import com.jquantium.bean.view.page.Page;
+import com.jquantium.dao.ORM;
+import com.jquantium.util.auto.AHashMap;
+import com.jquantium.util.auto.AList;
+import com.jquantium.util.auto.AMap;
+import com.jquantium.util.auto.ATreeMap;
 import com.jquantium.util.error.PageNotFoundException;
-import com.jquantium.util.memory.MHashMap;
-import com.jquantium.util.memory.MList;
-import com.jquantium.util.memory.MTreeMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,37 +17,28 @@ import java.util.List;
  */
 @Service
 public class View {
+    @Autowired
+    private ORM orm;
 
-    private MList<Page> pageList = new MList<Page>() {
+    private AList<Page> pageList = new AList<Page>(orm) {
         @Override
-        protected List<Page> init() {
-            return null;
-        }
-
-        @Override
-        protected boolean createElement(Page element) {
-            return false;
-        }
-
-        @Override
-        protected boolean updateElement(Page element) {
-            return false;
-        }
-
-        @Override
-        protected boolean removeElement(Page element) {
-            return false;
+        public List<Page> init() {
+            try {
+                return orm.selectList(Page.class);
+            } catch (Exception e) {
+                return null;
+            }
         }
     };
 
-    private MHashMap<Integer, Page> pageById = new MHashMap<Integer, Page>(pageList) {
+    private AMap<Integer, Page> pageById = new AHashMap<Integer, Page>(pageList) {
         @Override
         public Integer getKey(Page page) {
             return page.getPageId();
         }
     };
 
-    private MTreeMap<String, Page> pageByUrl = new MTreeMap<String, Page>(pageList) {
+    private AMap<String, Page> pageByUrl = new ATreeMap<String, Page>(pageList) {
         @Override
         public String getKey(Page page) {
             return page.getUrl();
@@ -66,6 +60,5 @@ public class View {
 
         return pageByUrl.get(url);
     }
-
 
 }

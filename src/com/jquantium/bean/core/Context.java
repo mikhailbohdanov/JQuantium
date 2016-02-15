@@ -4,8 +4,6 @@ import com.jquantium.bean.Url;
 import com.jquantium.bean.localization.Language;
 import com.jquantium.bean.security.UserSecurity;
 import com.jquantium.helper.UserHelper;
-import com.jquantium.service.CORE;
-import com.jquantium.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

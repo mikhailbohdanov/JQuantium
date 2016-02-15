@@ -47,6 +47,13 @@ public class ORM {
         return returns;
     }
 
+    public <E> E select(Class<E> eClass) throws Exception {
+        return select(eClass, 0);
+    }
+    public <E> E select(Class<E> eClass, int nodeId) throws Exception {
+        return null;
+    }
+
     public <E> E selectById(Class<E> eClass, int id) throws Exception {
         return selectById(eClass, id, 0);
     }

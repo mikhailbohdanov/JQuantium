@@ -2,7 +2,6 @@ package com.jquantium.helper;
 
 import com.jquantium.bean.Url;
 import com.jquantium.bean.core.Context;
-import com.jquantium.bean.view.NativePageContext;
 import com.jquantium.bean.view.PageContext;
 import com.jquantium.bean.view.ViewContext;
 import org.springframework.ui.Model;
@@ -48,18 +47,19 @@ public class ContextHelper {
         return PC;
     }
 
+    public static ViewContext newViewContext(HttpServletRequest request, HttpServletResponse response, Model model) {
+        return newViewContext(request, response, model, null);
+    }
     public static ViewContext newViewContext(HttpServletRequest request, HttpServletResponse response, Model model, Url url) {
-        ViewContext VC = new ViewContext(request, response, model);
+        ViewContext VC = new ViewContext(request, response);
 
+        VC.setModel(model);
         initContext(VC, request, response, url);
 
         return VC;
     }
 
 
-    public static NativePageContext newNativePageContext(HttpServletRequest request, HttpServletResponse response) {
-        return new NativePageContext(request, response);
-    }
 
     public static boolean hasAjax(HttpServletRequest request) {
         String param = null;
